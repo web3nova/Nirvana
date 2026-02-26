@@ -3,10 +3,17 @@ base {
   padding: 0px;
 }
 body {
-  background-color: black;
+  background-color: white;
+  color: black;
+}
+.hero-container {
+  background-image: linear-gradient(rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0.5)),url("/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
 }
 .nav-container {
-  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -15,6 +22,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  margin-bottom: 14px;
 }
 .nav-menuright{
   display: flex;
