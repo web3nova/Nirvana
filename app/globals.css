@@ -1,6 +1,7 @@
-base {
+*{
   margin: 0px;
   padding: 0px;
+  border: none;
 }
 body {
   background-color: white;
@@ -80,3 +81,34 @@ padding-left: 25px;
   cursor: pointer;
   border-radius: 50px;
 }
+.hero-text {
+  color: white;
+  width: 619px;
+  height: 158px;
+  /* angle: 0 deg; */
+  opacity: 1;
+  top: 562px;
+  left: 114px;
+
+}
+.hero-para {
+    color: white;
+    top: 744px;
+    left: 120px;
+
+    width: 766px;
+    height: 23px;
+
+    opacity: 1;
+    transform: rotate(0deg); 
+
+    font-family: 'Plus Jakarta Sans', sans‑serif;
+    font-weight: 500;            
+    font-style: normal;         
+    font-size: 18px;
+    line-height: 1;              
+    letter-spacing: -0.02em;     
+
+    /* leading-trim: none; */     
+}
+
