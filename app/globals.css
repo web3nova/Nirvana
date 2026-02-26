@@ -1,9 +1,12 @@
-base {
+*{
   margin: 0px;
   padding: 0px;
+  border: none;
+  color: antiquewhite;
 }
 body {
-  background-color: black;
+  background-color: rgb(255, 255, 255);
+  margin-top: 5rem;
 }
 .nav-container {
   position: fixed;
@@ -15,6 +18,11 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 .nav-menuright{
   display: flex;
@@ -71,4 +79,39 @@ padding-left: 25px;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 50px;
+}
+
+.theinput{
+  background-color:rgb(17, 17, 17);
+  width: 300px;
+  display:flex;
+  justify-content: space-between;
+   border-radius: 20px;
+
+}
+
+.footer{
+  background-color: rgb(7, 7, 7);
+  border-top-left-radius: 30px ;
+  border-top-right-radius: 30px;
+  
+}
+
+.input_txt{
+ padding: 0.7rem;
+ background: transparent;
+}
+
+.search_button{
+  background-color: rgb(86, 86, 255);
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 20px;
+}
+
+.footerhead{
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
 }
