@@ -2,17 +2,13 @@
   margin: 0px;
   padding: 0px;
   border: none;
+<<<<<<< HEAD
+=======
+  color: antiquewhite;
+>>>>>>> 6c49a4241ef96e1e2c3b9dd90c6c57230355e705
 }
 body {
-  background-color: white;
-  color: black;
-}
-.hero-container {
-  background-image: linear-gradient(rgb(0, 0, 0, 0.5), rgb(0, 0, 0, 0.5)),url("/background.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
+  background-color: black;
 }
 .nav-container {
   top: 0;
@@ -23,7 +19,6 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  margin-bottom: 14px;
 }
 .nav-menuright{
   display: flex;
@@ -81,6 +76,7 @@ padding-left: 25px;
   cursor: pointer;
   border-radius: 50px;
 }
+<<<<<<< HEAD
 .hero-text {
   color: white;
   width: 619px;
@@ -112,3 +108,40 @@ padding-left: 25px;
     /* leading-trim: none; */     
 }
 
+=======
+
+.theinput{
+  background-color:rgb(17, 17, 17);
+  width: 300px;
+  display:flex;
+  justify-content: space-between;
+   border-radius: 20px;
+
+}
+
+.footer{
+  background-color: rgb(7, 7, 7);
+  border-top-left-radius: 30px ;
+  border-top-right-radius: 30px;
+  
+}
+
+.input_txt{
+ padding: 0.7rem;
+ background: transparent;
+}
+
+.search_button{
+  background-color: rgb(86, 86, 255);
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 20px;
+}
+
+.footerhead{
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+}
+>>>>>>> 6c49a4241ef96e1e2c3b9dd90c6c57230355e705
