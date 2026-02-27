@@ -1,17 +1,19 @@
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import Reveiw from "@/components/reveiw";
+ 
 import Hero from "@/components/hero";
 import About from "@/components/About";
-import Courses from "@/components/courses";
 
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
       <Navbar />
       <Hero />
+      <Team />
+      <Faq />
+      <Stats />
+    
       <About />
-      <Courses/>
       <Reveiw />
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-4">Welcome to My Next.js App</h1>
