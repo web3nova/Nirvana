@@ -1,6 +1,6 @@
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import Reveiw from "@/components/reveiw";
+ 
 import Hero from "@/components/hero";
 import About from "@/components/About";
 import Partnership from "@/components/Patnership";  
@@ -10,6 +10,10 @@ export default function Home() {
     <div className="overflow-x-hidden">
       <Navbar />
       <Hero />
+      <Team />
+      <Faq />
+      <Stats />
+    
       <About />
       <Reveiw />
       <main className="container mx-auto px-4 py-8">
