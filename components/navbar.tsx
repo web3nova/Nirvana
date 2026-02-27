@@ -4,169 +4,256 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const navLinks = {
-  left: [
-    { label: "Home", href: "/" },
-    { label: "Articles", href: "/articles" },
-    { label: "Course", href: "/course" },
-  ],
-  right: [
-    { label: "Events", href: "/events" },
-    { label: "Team", href: "/team" },
-  ],
-};
+const leftLinks  = ["Home", "Articles", "Course"];
+const rightLinks = ["Events", "Team"];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [visible,  setVisible]  = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const hero = document.getElementById("hero-section");
+    if (!hero) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
+  /* ── shared font style for all nav text ── */
+  const navFont: React.CSSProperties = {
+    fontFamily   : "'Plus Jakarta Sans', sans-serif",
+    fontWeight   : 500,
+    fontSize     : 16,
+    lineHeight   : 1,
+    letterSpacing: "-0.02em",
+  };
+
+  /* ── exact button spec from design ── */
+  const btnStyle: React.CSSProperties = {
+    height       : 50,
+    borderRadius : 61,
+    gap          : 10,
+    paddingTop   : 15,
+    paddingRight : 31,
+    paddingBottom: 15,
+    paddingLeft  : 31,
+    background   : "#2B7FFF",
+    color        : "#fff",
+    display      : "inline-flex",
+    alignItems   : "center",
+    justifyContent: "center",
+    whiteSpace   : "nowrap",
+    ...navFont,
+    fontWeight   : 600,
+    transition   : "background .2s ease, transform .15s ease",
+    boxShadow    : "0 0 22px rgba(43,127,255,.4)",
+  };
+
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        .jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .nav-link-hover {
-          position: relative;
-        }
-        .nav-link-hover::after {
-          content: '';
-          position: absolute;
-          bottom: -2px; left: 0;
+
+        /* underline hover on nav links */
+        .nav-lnk { position: relative; }
+        .nav-lnk::after {
+          content: ''; position: absolute;
+          bottom: -3px; left: 0;
           width: 0; height: 1.5px;
-          background: #fff;
-          transition: width 0.25s ease;
+          background: #fff; border-radius: 99px;
+          transition: width .22s ease;
         }
-        .nav-link-hover:hover::after { width: 100%; }
-        @keyframes fadeDown {
+        .nav-lnk:hover::after { width: 100%; }
+
+        /* navbar slide-in */
+        @keyframes navDown {
+          from { opacity: 0; transform: translateY(-18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .nav-enter { animation: navDown .32s cubic-bezier(.22,1,.36,1) forwards; }
+
+        /* mobile menu */
+        @keyframes mobDown {
           from { opacity: 0; transform: translateY(-8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        .mobile-menu-enter { animation: fadeDown 0.25s ease forwards; }
+        .mob-menu { animation: mobDown .22s cubic-bezier(.22,1,.36,1) forwards; }
+
+        .mob-lnk {
+          display: flex; align-items: center; justify-content: space-between;
+          transition: color .16s ease, padding-left .16s ease;
+        }
+        .mob-lnk:hover { color: #fff !important; padding-left: 5px; }
+        .mob-arrow { opacity: 0; transform: translateX(-4px); transition: opacity .16s, transform .16s; }
+        .mob-lnk:hover .mob-arrow { opacity: 1; transform: translateX(0); }
+
+        .join-btn:hover  { background: #1a6ee0 !important; transform: scale(1.03); }
+        .join-btn:active { transform: scale(.97); }
       `}</style>
 
-      <header
-        className={`jakarta fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#111214]/90 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
-            : "bg-[#111214]/70 backdrop-blur-md border-b border-white/[0.04]"
-        }`}
+      <div
+        style={{
+          position     : "fixed",
+          top          : 0, left: 0, right: 0,
+          zIndex       : 50,
+          /* equal padding all sides on mobile: 10px; desktop: 12px */
+          padding      : "10px 10px 0",
+          opacity      : visible ? 1 : 0,
+          pointerEvents: visible ? "auto" : "none",
+          transition   : "opacity .3s ease",
+          fontFamily   : "'Plus Jakarta Sans', sans-serif",
+        }}
       >
-        <nav className="max-w-[1280px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between gap-6">
+        <div
+          key={String(visible)}
+          className={visible ? "nav-enter" : ""}
+          style={{
+            background          : "rgba(15,16,17,0.92)",
+            backdropFilter      : "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            borderRadius        : menuOpen ? "14px 14px 0 0" : "14px",
+            border              : "1px solid rgba(255,255,255,0.12)",
+            borderBottom        : menuOpen ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(255,255,255,0.12)",
+            transition          : "border-radius .22s ease",
+          }}
+        >
+          {/* ── NAV BAR ── */}
+          <nav className="h-[64px] flex items-center justify-between px-5 md:px-8 relative">
 
-          {/* ── LEFT NAV LINKS (desktop) ── */}
-          <ul className="hidden md:flex items-center gap-8 list-none">
-            {navLinks.left.map(({ label, href }) => (
-              <li key={label}>
-                <Link
-                  href={href}
-                  className="nav-link-hover text-white/80 hover:text-white transition-colors duration-200 text-[15px] font-medium leading-none tracking-[-0.02em]"
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* ── LOGO (center) ── */}
-          <Link
-            href="/"
-            className="flex items-center gap-3 shrink-0 mx-auto md:mx-0 absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0"
-          >
-            {/* SVG Logo Icon – geometric hexagon pattern matching the screenshot */}
-            <div className="w-9 h-9 rounded-full border border-white/30 flex items-center justify-center bg-white/5">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 2L19.5 7V15L11 20L2.5 15V7L11 2Z" stroke="white" strokeWidth="1.4" fill="none"/>
-                <path d="M11 6L16 9V14L11 17L6 14V9L11 6Z" stroke="white" strokeWidth="1.2" fill="none"/>
-                <path d="M11 9.5L13.5 11V13.5L11 15L8.5 13.5V11L11 9.5Z" fill="white" opacity="0.8"/>
-              </svg>
-            </div>
-            <span className="text-white font-semibold text-[15px] leading-[1.2] tracking-[-0.02em]">
-              Nirvana<br />
-              <span className="font-medium text-white/80">Academy</span>
-            </span>
-          </Link>
-
-          {/* ── RIGHT NAV LINKS + CTA (desktop) ── */}
-          <div className="hidden md:flex items-center gap-8">
-            <ul className="flex items-center gap-8 list-none">
-              {navLinks.right.map(({ label, href }) => (
-                <li key={label}>
-                  <Link
-                    href={href}
-                    className="nav-link-hover text-white/80 hover:text-white transition-colors duration-200 text-[15px] font-medium leading-none tracking-[-0.02em]"
-                  >
-                    {label}
+            {/* LEFT — desktop */}
+            <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
+              {leftLinks.map(l => (
+                <li key={l}>
+                  <Link href={`/${l.toLowerCase()}`}
+                    className="nav-lnk"
+                    style={{ ...navFont, color: "rgba(255,255,255,.82)" }}>
+                    {l}
                   </Link>
                 </li>
               ))}
             </ul>
+
+            {/* CENTER LOGO — desktop: absolute center | mobile: left */}
             <Link
-              href="/join"
-              className="bg-[#2563EB] hover:bg-[#1d4ed8] active:scale-95 transition-all duration-200 text-white text-[15px] font-semibold leading-none tracking-[-0.02em] px-5 py-[10px] rounded-full shadow-[0_0_20px_rgba(37,99,235,0.35)] hover:shadow-[0_0_28px_rgba(37,99,235,0.5)]"
+              href="/"
+              className="flex items-center gap-[10px] md:absolute md:left-1/2 md:-translate-x-1/2"
             >
-              Join Nirvana
+              {/* 
+                Logo image from /public folder.
+                Name your file "logo.svg" (or adjust src below).
+              */}
+              <Image
+                src="/logo.svg"
+                alt="Nirvana Academy"
+                width={149}
+                height={50}
+                style={{ objectFit: "contain" }}
+                priority
+              />
             </Link>
-          </div>
 
-          {/* ── HAMBURGER (mobile) ── */}
-          <button
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden ml-auto flex flex-col justify-center items-center w-9 h-9 gap-[5px] z-50"
-          >
-            <span
-              className={`block h-[1.5px] bg-white rounded-full transition-all duration-300 ${
-                menuOpen ? "w-5 rotate-45 translate-y-[6.5px]" : "w-5"
-              }`}
-            />
-            <span
-              className={`block h-[1.5px] bg-white rounded-full transition-all duration-300 ${
-                menuOpen ? "w-0 opacity-0" : "w-4"
-              }`}
-            />
-            <span
-              className={`block h-[1.5px] bg-white rounded-full transition-all duration-300 ${
-                menuOpen ? "w-5 -rotate-45 -translate-y-[6.5px]" : "w-5"
-              }`}
-            />
-          </button>
-        </nav>
-
-        {/* ── MOBILE MENU ── */}
-        {menuOpen && (
-          <div className="mobile-menu-enter md:hidden bg-[#111214]/98 backdrop-blur-xl border-t border-white/[0.06] px-6 pt-6 pb-8 flex flex-col gap-5">
-            {[...navLinks.left, ...navLinks.right].map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                onClick={() => setMenuOpen(false)}
-                className="text-white/80 hover:text-white text-[17px] font-medium tracking-[-0.02em] py-1 border-b border-white/[0.06] transition-colors"
-              >
-                {label}
+            {/* RIGHT — desktop */}
+            <div className="hidden md:flex items-center gap-8">
+              {rightLinks.map(l => (
+                <Link key={l} href={`/${l.toLowerCase()}`}
+                  className="nav-lnk"
+                  style={{ ...navFont, color: "rgba(255,255,255,.82)" }}>
+                  {l}
+                </Link>
+              ))}
+              <Link href="/join" className="join-btn" style={btnStyle}>
+                Join Nirvana
               </Link>
-            ))}
-            <Link
-              href="/join"
-              onClick={() => setMenuOpen(false)}
-              className="mt-2 bg-[#2563EB] hover:bg-[#1d4ed8] text-white text-[16px] font-semibold leading-none tracking-[-0.02em] px-5 py-[14px] rounded-full text-center shadow-[0_0_20px_rgba(37,99,235,0.35)]"
+            </div>
+
+            {/* HAMBURGER — mobile only */}
+            <button
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMenuOpen(v => !v)}
+              className="md:hidden ml-auto flex flex-col justify-center items-center w-9 h-9 gap-[5px]"
+              style={{
+                borderRadius: 9,
+                background  : menuOpen ? "rgba(255,255,255,.08)" : "transparent",
+                transition  : "background .2s",
+                flexShrink  : 0,
+              }}
             >
-              Join Nirvana
-            </Link>
-          </div>
-        )}
-      </header>
+              <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen ? "w-5 rotate-45 translate-y-[6.5px]" : "w-5"}`} style={{ borderRadius: 2 }} />
+              <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen ? "w-0 opacity-0" : "w-[13px]"}`} style={{ borderRadius: 2 }} />
+              <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen ? "w-5 -rotate-45 -translate-y-[6.5px]" : "w-5"}`} style={{ borderRadius: 2 }} />
+            </button>
+          </nav>
+
+          {/* ── MOBILE DROPDOWN ── */}
+          {menuOpen && (
+            <div
+              className="mob-menu md:hidden"
+              style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}
+            >
+              {/* 2-col grid of links */}
+              <div className="grid grid-cols-2 gap-[6px] p-3">
+                {[...leftLinks, ...rightLinks].map(l => (
+                  <Link
+                    key={l}
+                    href={`/${l.toLowerCase()}`}
+                    onClick={() => setMenuOpen(false)}
+                    className="mob-lnk"
+                    style={{
+                      ...navFont,
+                      color       : "rgba(255,255,255,.70)",
+                      padding     : "13px 14px",
+                      borderRadius: 10,
+                      background  : "rgba(255,255,255,.04)",
+                      border      : "1px solid rgba(255,255,255,.06)",
+                    }}
+                  >
+                    {l}
+                    <svg className="mob-arrow w-4 h-4" fill="none" viewBox="0 0 16 16"
+                      style={{ color: "rgba(255,255,255,.38)" }}>
+                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </Link>
+                ))}
+              </div>
+
+              {/* divider */}
+              <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "0 12px" }} />
+
+              {/* Join CTA full-width */}
+              <div className="p-3">
+                <Link
+                  href="/join"
+                  onClick={() => setMenuOpen(false)}
+                  className="join-btn flex items-center justify-center gap-2 w-full"
+                  style={{
+                    ...btnStyle,
+                    width        : "100%",
+                    height       : 50,
+                    borderRadius : 12,
+                    background   : "#2B7FFF",
+                    boxShadow    : "0 4px 22px rgba(43,127,255,.38)",
+                    paddingTop   : 15,
+                    paddingBottom: 15,
+                  }}
+                >
+                  Join Nirvana
+                  <svg width="15" height="15" fill="none" viewBox="0 0 16 16">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }

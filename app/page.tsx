@@ -1,22 +1,22 @@
 import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
-import Reveiw from "@/components/reveiw";
 import Hero from "@/components/hero";
 import About from "@/components/About";
+import Reveiw from "@/components/reveiw";
+import Footer from "@/components/footer";
 
 export default function Home() {
   return (
-    <div className="overflow-x-hidden">
+    <div className="bg-white min-h-screen">
+      {/*
+        Navbar is sticky — stays at top as you scroll to About, Review etc.
+        Hero card connects flush beneath it (no top margin, no top border-radius).
+        Together they look like one card on the hero, but navbar stays
+        pinned at the top for all other sections.
+      */}
       <Navbar />
       <Hero />
       <About />
       <Reveiw />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-4">Welcome to My Next.js App</h1>
-        <p className="text-lg text-gray-700">
-          This is a simple Next.js application with a navbar and footer.
-        </p>
-      </main>
       <Footer />
     </div>
   );
