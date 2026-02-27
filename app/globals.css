@@ -14,13 +14,130 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: white;
+    --foreground: black;
   }
 }
-
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+.Eco-h1{
+  font-size: 3rem;
+  font-weight: 500;
+
+}
+.Eco-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  /* gap: 10px; */
+}
+.f-img{
+  width: 20rem;
+  height: 25rem;
+}
+section {
+  padding-left: 7rem;
+  padding-right: 7rem;
+  /* padding-top: 50px;
+  padding-bottom: 50px; */
+}
+.social-logo {
+  width: 14rem;
+  padding: 1rem 1rem 0px 1rem;
+}
+.social-text {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: left;
+  padding: 1rem 1rem 0px 1rem;
+}
+.c-1 {
+  border-radius: 12px;
+  width: 20rem;
+  height: 25rem;
+}
+.c-2 {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  width: 20rem;
+  height: 25rem;
+  background: #F7F8F9;
+  gap: 1rem;
+  border-radius: 12px;
+}
+.vector {
+  margin-top: auto;
+  width: 100%;
+}
+.Eco-container-1 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+.c-3 {
+  display: flex;
+  flex-direction: column;
+  background-color: #F7F8F9;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 40rem;
+  height: 25rem;
+}
+.c3-text, .c4-text {
+  margin-top: auto;
+}
+.c-4 {
+  display: flex;
+  flex-direction: column;
+  background-color: #F7F8F9;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 40rem;
+  height: 25rem;
+}
+.Eco-container-2 {
+  display: grid;
+  padding-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(3, 1fr));
+  align-items: center;
+  gap: 1rem;
+}
+.c5-img {
+  width: 20rem;
+  height: 25rem;
+}
+.c-5 {
+  border-radius: 12px;
+  width: 20rem;
+  height: 25rem;
+}
+.c-6 {
+  display: flex;
+  flex-direction: column;
+  background-color: #F7F8F9;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 20rem;
+  height: 25rem;
+}
+.coming-soon {
+  background-color: #c8c8c8;
+  width: fit-content;
+  padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+  border-radius: 12px;
+  margin-top: auto;
+  border: 1px solid #a4a4a4;
 }
