@@ -3,6 +3,7 @@ import Footer from "@/components/footer";
 import Reveiw from "@/components/reveiw";
 import Hero from "@/components/hero";
 import About from "@/components/About";
+import Partnership from "@/components/Patnership";  
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
           This is a simple Next.js application with a navbar and footer.
         </p>
       </main>
+      <Partnership />
       <Footer />
     </div>
   );
