@@ -3,6 +3,7 @@ import Footer from "@/components/footer";
 import Reveiw from "@/components/reveiw";
 import Hero from "@/components/hero";
 import About from "@/components/About";
+import Courses from "@/components/courses";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
+      <Courses/>
       <Reveiw />
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-4">Welcome to My Next.js App</h1>
