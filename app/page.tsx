@@ -12,11 +12,12 @@ export default function Home() {
     <div className="bg-white min-h-screen">
       <Navbar />
       <Hero />
-      <Team />
       <Stats />
+ 
+      <Team />
+      
       <Faq />
       <About />
-      <Review />
       <Footer />
     </div>
   );
