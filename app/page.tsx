@@ -6,18 +6,11 @@ import About from "@/components/About";
 
 export default function Home() {
   return (
-    <div>
-      <div className="hero-container">
+    <div className="overflow-x-hidden">
       <Navbar />
-<<<<<<< HEAD
-      <Hero/>
-      </div>
-      <About/>
+      <Hero />
+      <About />
       <Reveiw />
-
-=======
->>>>>>> 6c49a4241ef96e1e2c3b9dd90c6c57230355e705
-
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-4">Welcome to My Next.js App</h1>
         <p className="text-lg text-gray-700">
