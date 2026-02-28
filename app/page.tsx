@@ -1,8 +1,15 @@
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
- 
+ import Courses from "@/components/courses";
+ import Team from "@/components/team";
+ import Ecosystem from "@/components/ourecosystem";
+ import PartnershipSection from "@/components/Patnership";
 import Hero from "@/components/hero";
+import Stats from "@/components/stats";
 import About from "@/components/About";
+import Review from "@/components/reveiw";
+import Faq from "@/components/faq";
+import Contact from "@/components/contact";
 
 export default function Home() {
   return (
@@ -11,21 +18,13 @@ export default function Home() {
       <Hero />
       <About />
       <Stats />
+      <Ecosystem/>
       <Courses/>
-     <Team />
-
-      
+      < Review/>
+      <PartnershipSection/>
+      <Team />
       <Faq />
-      <Stats />
-    
-      <About />
-      <Reveiw />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-4">Welcome to My Next.js App</h1>
-        <p className="text-lg text-gray-700">
-          This is a simple Next.js application with a navbar and footer.
-        </p>
-      </main>
+      <Contact/>
       <Footer />
     </div>
   );

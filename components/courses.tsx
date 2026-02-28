@@ -2,6 +2,71 @@
 
 import { useState, useEffect, useRef } from "react";
 
+/* ── Keyframes injected once — only what Tailwind can't express ── */
+const STYLES = `
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes titleReveal {
+    from { opacity: 0; transform: translateY(30px) rotate(-1.5deg); }
+    to   { opacity: 1; transform: translateY(0) rotate(0deg); }
+  }
+  @keyframes cardUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes checkPop {
+    from { opacity: 0; transform: scale(0.4); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes vibrate {
+    0%,100% { transform: translateX(0); }
+    15%      { transform: translateX(-3px) rotate(-0.5deg); }
+    30%      { transform: translateX(3px)  rotate(0.5deg); }
+    45%      { transform: translateX(-2px) rotate(-0.3deg); }
+    60%      { transform: translateX(2px)  rotate(0.3deg); }
+    75%      { transform: translateX(-1px); }
+    88%      { transform: translateX(1px); }
+  }
+
+  .anim-fade-up  { animation: fadeUp     0.55s cubic-bezier(0.22,0.68,0,1.1)  both; }
+  .anim-fade-in  { animation: fadeIn     0.4s  ease                            both; }
+  .anim-title    { animation: titleReveal 0.72s cubic-bezier(0.22,0.68,0,1.1) both; }
+  .anim-card     { animation: cardUp     0.65s cubic-bezier(0.22,0.68,0,1.05) both; }
+  .anim-check    { animation: checkPop   0.3s  cubic-bezier(0.34,1.56,0.64,1) both; }
+
+  /* pill dot */
+  .pill-dot::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #2B7FFF;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  /* enroll button hover — vibrate + colour swap */
+  .enroll-btn {
+    transition: background 0.28s ease, box-shadow 0.28s ease;
+  }
+  .enroll-btn:hover {
+    background: #2B7FFF !important;
+    box-shadow: 0 8px 32px rgba(43,127,255,0.32);
+    animation: vibrate 0.38s ease;
+  }
+  .enroll-btn:hover .enroll-text { color: #ffffff; }
+  .enroll-btn:hover .enroll-arrow { background: rgba(255,255,255,0.22) !important; }
+  .enroll-btn:active { box-shadow: none; }
+  .enroll-text { transition: color 0.28s ease; }
+`;
+
+/* ── IntersectionObserver hook ── */
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -9,7 +74,7 @@ function useInView(threshold = 0.1) {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      ([e]) => { if (e.isIntersecting) setVisible(true); },
       { threshold }
     );
     obs.observe(el);
@@ -18,6 +83,7 @@ function useInView(threshold = 0.1) {
   return { ref, visible };
 }
 
+/* ── Data ── */
 const stats = [
   {
     label: "12 Weeks\nIntensive",
@@ -66,309 +132,46 @@ const learnItems = [
 ];
 
 export default function Courses() {
-  const topRef = useInView(0.1);
+  const topRef  = useInView(0.1);
   const cardRef = useInView(0.1);
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+      <style>{STYLES}</style>
 
-        *, *::before, *::after { box-sizing: border-box; }
+      {/* Section — reduced bottom padding pb-10 instead of pb-20 */}
+      <section
+        className="w-full bg-white flex flex-col items-center pt-12 pb-10 px-6"
+        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      >
 
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(22px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; } to { opacity: 1; }
-        }
-        @keyframes titleReveal {
-          from { opacity: 0; transform: translateY(30px) rotate(-1.5deg); }
-          to   { opacity: 1; transform: translateY(0) rotate(0deg); }
-        }
-        @keyframes cardUp {
-          from { opacity: 0; transform: translateY(40px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes checkPop {
-          from { opacity: 0; transform: scale(0.4); }
-          to   { opacity: 1; transform: scale(1); }
-        }
+        {/* ── Header block ── */}
+        <div ref={topRef.ref} className="flex flex-col items-center w-full max-w-[900px]">
 
-        .anim-fade-up  { animation: fadeUp 0.55s cubic-bezier(0.22,0.68,0,1.1) both; }
-        .anim-fade-in  { animation: fadeIn 0.4s ease both; }
-        .anim-title    { animation: titleReveal 0.72s cubic-bezier(0.22,0.68,0,1.1) both; }
-        .anim-card     { animation: cardUp 0.65s cubic-bezier(0.22,0.68,0,1.05) both; }
-        .anim-check    { animation: checkPop 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
-
-        .latest-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          border: 1px solid rgba(43,127,255,0.3);
-          border-radius: 999px;
-          padding: 6px 18px;
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: 12.5px;
-          font-weight: 500;
-          color: #2B7FFF;
-          text-decoration: none;
-          background: rgba(43,127,255,0.04);
-          letter-spacing: -0.1px;
-          transition: background 0.2s;
-        }
-        .latest-pill:hover { background: rgba(43,127,255,0.09); }
-        .latest-pill::before {
-          content: '';
-          width: 6px; height: 6px;
-          border-radius: 50%;
-          background: #2B7FFF;
-          flex-shrink: 0;
-        }
-
-        .courses-section {
-          width: 100%;
-          min-height: 100vh;
-          background: #ffffff;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 52px 16px 80px;
-          font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        .top-block {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 100%;
-          max-width: 780px;
-        }
-
-        .card-wrapper {
-          width: 100%;
-          max-width: 780px;
-        }
-
-        /* The card: side-by-side on desktop, stacked on mobile */
-        .course-card {
-          display: flex;
-          flex-direction: row;
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 4px 40px rgba(0,0,0,0.09);
-        }
-
-        .black-panel {
-          background: #0a0a0a;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          padding: 20px;
-          width: 36%;
-          min-height: 440px;
-          flex-shrink: 0;
-        }
-
-        .right-panel {
-          background: #F7F8F9;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          padding: 24px;
-          gap: 20px;
-          justify-content: space-between;
-          min-width: 0;
-        }
-
-        /* Stat boxes: row on desktop */
-        .stats-row {
-          display: flex;
-          flex-direction: row;
-          gap: 10px;
-        }
-
-        .stat-box {
-          background: #ffffff;
-          border: 1px solid rgba(43,127,255,0.3);
-          border-radius: 12px;
-          padding: 16px 14px 14px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          flex: 1;
-          min-width: 0;
-        }
-
-        .stat-label {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-weight: 500;
-          font-size: 14px;
-          line-height: 18.89px;
-          letter-spacing: -0.14px;
-          color: #1a1916;
-          white-space: pre-line;
-        }
-
-        .learn-list {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .learn-item {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-weight: 400;
-          font-size: 14px;
-          line-height: 18.89px;
-          letter-spacing: -0.14px;
-          color: #4a4845;
-          display: flex;
-          align-items: flex-start;
-          gap: 10px;
-        }
-
-        .learn-check {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: rgba(43,127,255,0.08);
-          border: 1px solid rgba(43,127,255,0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          margin-top: 0px;
-          font-size: 10px;
-          color: #2B7FFF;
-          font-weight: 600;
-        }
-
-        .enroll-btn {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          background: #EAECF0;
-          border: none;
-          outline: none;
-          border-radius: 999px;
-          padding: 6px 6px 6px 22px;
-          cursor: pointer;
-          transition: background 0.22s ease, transform 0.15s ease, box-shadow 0.22s ease;
-        }
-        .enroll-btn:hover {
-          background: #2B7FFF;
-          transform: translateY(-1px);
-          box-shadow: 0 8px 28px rgba(43,127,255,0.28);
-        }
-        .enroll-btn:hover .enroll-text { color: #ffffff; }
-        .enroll-btn:hover .enroll-circle {
-          background: rgba(255,255,255,0.22) !important;
-        }
-        .enroll-btn:active { transform: translateY(0); box-shadow: none; }
-
-        .enroll-text {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: 15px;
-          font-weight: 600;
-          color: #1a1916;
-          letter-spacing: -0.2px;
-          transition: color 0.22s ease;
-        }
-
-        .enroll-circle {
-          width: 46px; height: 46px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #2B7FFF, #6c5ce7);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 20px;
-          flex-shrink: 0;
-          transition: background 0.22s ease;
-        }
-
-        /* ─── MOBILE ─── */
-        @media (max-width: 639px) {
-          .course-card {
-            flex-direction: column;
-          }
-          .black-panel {
-            width: 100%;
-            min-height: 180px;
-            padding: 18px;
-            border-radius: 0;
-          }
-          .right-panel {
-            padding: 20px 16px 18px;
-          }
-          /* 2x2 grid on mobile */
-          .stats-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-          }
-          .stat-box {
-            flex: unset;
-            padding: 14px 12px 12px;
-          }
-          .stat-label {
-            font-size: 13px;
-            line-height: 17px;
-          }
-          .learn-item {
-            font-size: 13.5px;
-          }
-          .enroll-text { font-size: 14px; }
-          .enroll-circle { width: 42px; height: 42px; font-size: 18px; }
-        }
-      `}</style>
-
-      <section className="courses-section">
-
-        {/* ── Top block ── */}
-        <div ref={topRef.ref} className="top-block">
-
+          {/* Latest Course pill */}
           <a
             href="#"
-            className={`latest-pill ${topRef.visible ? "anim-fade-in" : "opacity-0"}`}
-            style={{ marginBottom: 18, animationDelay: "0ms" }}
+            className={`pill-dot inline-flex items-center gap-[7px] border border-[rgba(43,127,255,0.3)] rounded-full px-[18px] py-[6px] text-[12.5px] font-medium text-[#2B7FFF] bg-[rgba(43,127,255,0.04)] no-underline mb-[18px] hover:bg-[rgba(43,127,255,0.09)] transition-colors ${topRef.visible ? "anim-fade-in" : "opacity-0"}`}
+            style={{ animationDelay: "0ms" }}
           >
             Latest Course
           </a>
 
+          {/* Subtitle */}
           <p
-            className={topRef.visible ? "anim-fade-up" : "opacity-0"}
-            style={{
-              fontSize: 14,
-              color: "#888884",
-              textAlign: "center",
-              lineHeight: "22px",
-              marginBottom: 10,
-              fontWeight: 400,
-              animationDelay: "70ms",
-            }}
+            className={`text-[14px] text-[#888884] text-center leading-[22px] font-normal mb-[10px] ${topRef.visible ? "anim-fade-up" : "opacity-0"}`}
+            style={{ animationDelay: "70ms" }}
           >
             Our battle-tested course turns novices into DeFi warriors.<br />
             Learn the game, win the trades.
           </p>
 
+          {/* Title */}
           <h1
-            className={topRef.visible ? "anim-title" : "opacity-0"}
+            className={`text-center font-normal text-[#1a1916] leading-none mb-10 ${topRef.visible ? "anim-title" : "opacity-0"}`}
             style={{
               fontFamily: "'Nanum Pen Script', cursive",
               fontSize: "clamp(46px, 8vw, 64px)",
-              fontWeight: 400,
-              color: "#1a1916",
-              textAlign: "center",
-              lineHeight: 1,
-              margin: "0 0 40px",
               animationDelay: "140ms",
             }}
           >
@@ -376,89 +179,75 @@ export default function Courses() {
           </h1>
         </div>
 
-        {/* ── Card ── */}
+        {/* ── Card wrapper ── */}
         <div
           ref={cardRef.ref}
-          className={`card-wrapper ${cardRef.visible ? "anim-card" : "opacity-0"}`}
+          className={`w-full max-w-[900px] ${cardRef.visible ? "anim-card" : "opacity-0"}`}
           style={{ animationDelay: "80ms" }}
         >
-          <div className="course-card">
+          {/* Card: row on desktop, col on mobile */}
+          <div className="flex flex-col sm:flex-row rounded-[20px] overflow-hidden shadow-[0_4px_48px_rgba(0,0,0,0.11)] min-h-[520px] sm:min-h-[480px]">
 
-            {/* Left black panel */}
-            <div className="black-panel">
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <span style={{
-                  background: "rgba(255,255,255,0.07)",
-                  border: "1px solid rgba(255,255,255,0.14)",
-                  borderRadius: 999,
-                  padding: "5px 14px",
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.7)",
-                  fontWeight: 500,
-                  letterSpacing: "0.2px",
-                }}>
+            {/* ── Left black panel (~62%) ── */}
+            <div className="bg-[#0a0a0a] flex flex-col justify-between p-7 sm:flex-[62] w-full sm:w-auto min-h-[200px] sm:min-h-0">
+              {/* Coming soon badge — top right */}
+              <div className="flex justify-end">
+                <span className="bg-white/[0.07] border border-white/[0.14] rounded-full px-[14px] py-[5px] text-[11px] text-white/70 font-medium tracking-[0.2px]">
                   Coming soon
                 </span>
               </div>
-              <p style={{
-                fontSize: 12.5,
-                color: "rgba(255,255,255,0.4)",
-                lineHeight: "20px",
-                fontWeight: 300,
-                margin: 0,
-                maxWidth: 180,
-              }}>
+
+              {/* Push description to bottom */}
+              <div className="flex-1" />
+
+              <p className="text-[13px] text-white/40 leading-[21px] font-light m-0 max-w-[260px]">
                 Master crypto trading with our flagship course — your ticket to life-changing wins.
               </p>
             </div>
 
-            {/* Right content panel */}
-            <div className="right-panel">
+            {/* ── Right panel (~38%) ── */}
+            <div className="bg-[#F7F8F9] sm:flex-[38] flex flex-col justify-between gap-[22px] p-6 sm:p-7 min-w-0">
 
-              {/* Top section */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div className="flex flex-col gap-[18px]">
 
-                {/* Stats */}
-                <div className="stats-row">
+                {/* Stats 2×2 grid */}
+                <div className="grid grid-cols-2 gap-[10px]">
                   {stats.map((stat, i) => (
                     <div
                       key={i}
-                      className={`stat-box ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
+                      className={`bg-white border border-[rgba(43,127,255,0.3)] rounded-xl p-[14px] flex flex-col gap-3 ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
                       style={{ animationDelay: `${240 + i * 55}ms` }}
                     >
                       {stat.icon}
-                      <span className="stat-label">{stat.label}</span>
+                      <span
+                        className="text-[13px] font-medium text-[#1a1916] leading-[18px] tracking-[-0.13px] whitespace-pre-line"
+                      >
+                        {stat.label}
+                      </span>
                     </div>
                   ))}
                 </div>
 
                 {/* Divider */}
-                <div style={{ height: 1, background: "#e4e6ea" }} />
+                <div className="h-px bg-[#e4e6ea]" />
 
                 {/* What You'll Learn */}
                 <div>
                   <p
-                    className={cardRef.visible ? "anim-fade-up" : "opacity-0"}
-                    style={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "#1a1916",
-                      letterSpacing: "-0.14px",
-                      marginBottom: 14,
-                      animationDelay: "370ms",
-                    }}
+                    className={`text-[13px] font-semibold text-[#1a1916] tracking-[-0.13px] mb-3 ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
+                    style={{ animationDelay: "370ms" }}
                   >
                     What You'll Learn
                   </p>
-                  <ul className="learn-list">
+                  <ul className="m-0 p-0 list-none flex flex-col gap-[11px]">
                     {learnItems.map((item, i) => (
                       <li
                         key={i}
-                        className={`learn-item ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
+                        className={`flex items-start gap-[10px] text-[13px] text-[#4a4845] leading-[18px] tracking-[-0.13px] ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
                         style={{ animationDelay: `${410 + i * 45}ms` }}
                       >
                         <span
-                          className={`learn-check ${cardRef.visible ? "anim-check" : "opacity-0"}`}
+                          className={`w-[18px] h-[18px] rounded-full bg-[rgba(43,127,255,0.08)] border border-[rgba(43,127,255,0.2)] flex items-center justify-center shrink-0 text-[9px] text-[#2B7FFF] font-bold ${cardRef.visible ? "anim-check" : "opacity-0"}`}
                           style={{ animationDelay: `${425 + i * 45}ms` }}
                         >
                           ✓
@@ -470,14 +259,24 @@ export default function Courses() {
                 </div>
               </div>
 
-              {/* Enroll — bottom */}
+              {/* ── Enroll button ── */}
               <div
                 className={cardRef.visible ? "anim-fade-up" : "opacity-0"}
                 style={{ animationDelay: "590ms" }}
               >
-                <button className="enroll-btn">
-                  <span className="enroll-text">Enroll now</span>
-                  <div className="enroll-circle">→</div>
+                <button
+                  className="enroll-btn w-full flex items-center justify-between rounded-[110px] px-[14px] py-[14px] pl-7 cursor-pointer border-0 outline-none"
+                  style={{ background: "#CFD4DC" }}
+                >
+                  <span className="enroll-text text-[15px] font-semibold text-[#1a1916] tracking-[-0.2px]">
+                    Enroll now
+                  </span>
+                  <div
+                    className="enroll-arrow w-[46px] h-[46px] rounded-full flex items-center justify-center text-white text-[20px] shrink-0"
+                    style={{ background: "linear-gradient(135deg, #2B7FFF, #6c5ce7)" }}
+                  >
+                    →
+                  </div>
                 </button>
               </div>
 
