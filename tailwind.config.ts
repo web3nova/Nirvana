@@ -8,7 +8,11 @@ const config: Config = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",   // ← add this if you use a /src folder
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        jakarta: ['var(--font-jakarta)', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };
