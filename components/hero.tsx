@@ -363,7 +363,7 @@ export default function HeroSection() {
         onMouseMove={handleMouseMove}
         className={`hero-card relative overflow-hidden flex flex-col ${loaded ? "loaded" : ""}`}
         style={{
-          margin      : "16px",
+          margin      : "8px",
           borderRadius: "18px",
           border      : "1px solid rgba(255,255,255,0.13)",
           minHeight   : "calc(100vh - 32px)",

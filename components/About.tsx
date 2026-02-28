@@ -1,19 +1,9 @@
-import Image from "next/image";
-import { Plus_Jakarta_Sans } from "next/font/google";
+"use client";
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-});
+import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 const JAKARTA = "var(--font-jakarta, 'Plus Jakarta Sans', sans-serif)";
-
-const STAMP = {
-  desktop:     { width: "112px", height: "112px", bottom: "-44px", right: "-25px", left: "auto", top: "auto" },
-  tablet:      { width: "96px",  height: "96px",  bottom: "-36px", right: "20px",  left: "auto", top: "auto" },
-  mobileLarge: { width: "72px",  height: "72px",  bottom: "16px",  right: "16px",  left: "auto", top: "auto" },
-  mobileSmall: { width: "56px",  height: "56px",  bottom: "12px",  right: "12px",  left: "auto", top: "auto" },
-};
 
 const paragraphs = [
   "You already know how this story begins.",
@@ -30,81 +20,136 @@ const paragraphs = [
 const FLOATING_TICKER_ITEMS = Array(12).fill("NIRVANA ACADEMY");
 
 export default function About() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const textCardRef = useRef<HTMLDivElement>(null);
+  const photoCardRef = useRef<HTMLDivElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const parasRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    const targets = [
+      textCardRef.current,
+      photoCardRef.current,
+      headingRef.current,
+      parasRef.current,
+    ].filter(Boolean);
+
+    targets.forEach((el) => observer.observe(el!));
+    return () => observer.disconnect();
+  }, []);
+
+  // Parallax watermark on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!watermarkRef.current || !sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const progress = -rect.top * 0.18;
+      watermarkRef.current.style.transform = `translateX(-50%) translateY(calc(-50% + ${progress}px))`;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap');
 
+        /* ── Ticker animations ── */
         @keyframes scrollRight {
           0%   { transform: translateX(-50%); }
           100% { transform: translateX(0); }
         }
-
         @keyframes floatBand {
           0%   { transform: rotate(1.03deg) translateY(0px); }
           50%  { transform: rotate(1.03deg) translateY(-5px); }
           100% { transform: rotate(1.03deg) translateY(0px); }
         }
 
-        .floating-ticker-outer {
-          width: 110%;
-          margin-left: -5%;
-          background: #E0EDFF;
-          padding: 10px 0;
-          height: 71px;
-          display: flex;
-          align-items: center;
-          overflow: hidden;
-          transform: rotate(1.03deg);
-          transform-origin: center center;
-          animation: floatBand 4s ease-in-out infinite;
-          box-sizing: border-box;
+        /* ── Entrance keyframes ── */
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(48px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeLeft {
+          from { opacity: 0; transform: translateX(-56px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeRight {
+          from { opacity: 0; transform: translateX(56px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.6) rotate(-20deg); }
+          to   { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        @keyframes watermarkFade {
+          from { opacity: 0; }
+          to   { opacity: 1; }
         }
 
-        .floating-ticker-track {
-          display: inline-flex;
-          align-items: center;
-          white-space: nowrap;
-          animation: scrollRight 28s linear infinite;
-          will-change: transform;
+        /* ── Scroll-reveal base state ── */
+        .reveal-left  { opacity: 0; transform: translateX(-56px); transition: opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1); }
+        .reveal-right { opacity: 0; transform: translateX(56px);  transition: opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1); }
+        .reveal-up    { opacity: 0; transform: translateY(40px);   transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1); }
+
+        .reveal-left.in-view,
+        .reveal-right.in-view,
+        .reveal-up.in-view {
+          opacity: 1;
+          transform: translate(0, 0);
         }
 
-        .floating-ticker-label {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-weight: 600;
-          font-size: 48px;
-          line-height: 51px;
-          letter-spacing: -0.04em;
-          color: #75ACFF;
-          display: inline-flex;
-          align-items: center;
-          padding: 0 10px;
-          user-select: none;
-          gap: 10px;
+        /* Stagger the photo card slightly */
+        .reveal-right { transition-delay: 0.15s; }
+
+        /* ── Paragraph stagger ── */
+        .about-para {
+          font-weight: 400;
+          font-size: 13px;
+          line-height: 137%;
+          color: #3d3d3d;
+          margin: 0 0 7px 0;
+          padding: 0;
+          opacity: 0;
+          transform: translateY(12px);
+          transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .about-para:last-child { margin-bottom: 0; }
+        .reveal-up.in-view .about-para { opacity: 1; transform: translateY(0); }
+        ${Array.from({ length: 10 }, (_, i) => `.reveal-up.in-view .about-para:nth-child(${i + 1}) { transition-delay: ${0.05 * i}s; }`).join("\n")}
+
+        /* ── Stamp pop-in ── */
+        .about-stamp {
+          position: absolute;
+          display: block;
+          width: 112px; height: 112px;
+          bottom: -44px; right: -25px;
+          left: auto; top: auto;
+          z-index: 10;
+          opacity: 0;
+          transform: scale(0.5) rotate(-25deg);
+          transition: opacity 0.6s cubic-bezier(.34,1.56,.64,1), transform 0.6s cubic-bezier(.34,1.56,.64,1);
+          transition-delay: 0.9s;
+        }
+        .reveal-left.in-view .about-stamp {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
         }
 
-        .floating-ticker-diamond {
-          display: inline-block;
-          width: 26px;
-          height: 26px;
-          background-color: #75ACFF;
-          transform: rotate(45deg);
-          border-radius: 2px;
-          flex-shrink: 0;
-          opacity: 0.85;
-        }
-
-        .about-wrapper {
-          background-color: #ffffff;
-          width: 100%;
-          position: relative;
-          padding-top: 160px;
-          padding-bottom: 0;
-          box-sizing: border-box;
-          overflow-x: clip;
-          overflow-y: visible;
-        }
-
+        /* ── Watermark entrance ── */
         .about-watermark {
           position: absolute;
           top: 160px;
@@ -119,46 +164,10 @@ export default function About() {
           pointer-events: none;
           user-select: none;
           z-index: 1;
+          animation: watermarkFade 1.4s ease 0.3s both;
         }
 
-        .about-card-row {
-          position: relative;
-          z-index: 2;
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          justify-content: center;
-          gap: 16px;
-          padding: 0 32px 80px;
-          box-sizing: border-box;
-        }
-
-        .about-text-card {
-          width: 644px;
-          height: 832px;
-          flex-shrink: 0;
-          position: relative;
-          border-radius: 12px;
-          overflow: visible;
-          box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
-        }
-        .about-text-card-bg {
-          position: absolute;
-          inset: 0;
-          border-radius: 12px;
-          overflow: hidden;
-          z-index: 0;
-        }
-        .about-text-content {
-          position: relative;
-          z-index: 1;
-          padding: 48px;
-          height: 100%;
-          box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-        }
+        /* ── Heading ── */
         .about-h1 {
           font-weight: 600;
           font-size: 48px;
@@ -169,43 +178,92 @@ export default function About() {
           margin: 0 0 20px 0;
           padding: 0;
           flex-shrink: 0;
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        .about-para {
-          font-weight: 400;
-          font-size: 13px;
-          line-height: 137%;
-          color: #3d3d3d;
-          margin: 0 0 7px 0;
-          padding: 0;
-        }
-        .about-para:last-child { margin-bottom: 0; }
-
-        .about-stamp {
-          position: absolute;
-          display: block;
-          width:  112px;
-          height: 112px;
-          bottom: -44px;
-          right:  -25px;
-          left:   auto;
-          top:    auto;
-          z-index: 10;
+        .reveal-left.in-view .about-h1 {
+          opacity: 1;
+          transform: translateY(0);
+          transition-delay: 0.2s;
         }
 
-        .about-photo-card {
-          width: 539px;
-          height: 832px;
-          flex-shrink: 0;
-          position: relative;
-          border-radius: 12px;
+        /* ── Ticker ── */
+        .floating-ticker-outer {
+          width: 110%; margin-left: -5%;
+          background: #E0EDFF;
+          padding: 10px 0; height: 71px;
+          display: flex; align-items: center;
           overflow: hidden;
+          transform: rotate(1.03deg);
+          transform-origin: center center;
+          animation: floatBand 4s ease-in-out infinite;
+          box-sizing: border-box;
+        }
+        .floating-ticker-track {
+          display: inline-flex; align-items: center;
+          white-space: nowrap;
+          animation: scrollRight 28s linear infinite;
+          will-change: transform;
+        }
+        .floating-ticker-label {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-weight: 600; font-size: 48px;
+          line-height: 51px; letter-spacing: -0.04em;
+          color: #75ACFF;
+          display: inline-flex; align-items: center;
+          padding: 0 10px; user-select: none; gap: 10px;
+        }
+        .floating-ticker-diamond {
+          display: inline-block;
+          width: 26px; height: 26px;
+          background-color: #75ACFF;
+          transform: rotate(45deg);
+          border-radius: 2px; flex-shrink: 0; opacity: 0.85;
+        }
+
+        /* ── Layout ── */
+        .about-wrapper {
+          background-color: #ffffff;
+          width: 100%; position: relative;
+          padding-top: 160px; padding-bottom: 0;
+          box-sizing: border-box;
+          overflow-x: clip; overflow-y: visible;
+        }
+        .about-card-row {
+          position: relative; z-index: 2;
+          display: flex; flex-direction: row;
+          align-items: flex-start; justify-content: center;
+          gap: 16px; padding: 0 32px 80px;
+          box-sizing: border-box;
+        }
+        .about-text-card {
+          width: 644px; height: 832px;
+          flex-shrink: 0; position: relative;
+          border-radius: 12px; overflow: visible;
+          box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
+        }
+        .about-text-card-bg {
+          position: absolute; inset: 0;
+          border-radius: 12px; overflow: hidden; z-index: 0;
+        }
+        .about-text-content {
+          position: relative; z-index: 1;
+          padding: 48px; height: 100%;
+          box-sizing: border-box;
+          display: flex; flex-direction: column; overflow: hidden;
+        }
+        .about-photo-card {
+          width: 539px; height: 832px;
+          flex-shrink: 0; position: relative;
+          border-radius: 12px; overflow: hidden;
           box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
         }
 
+        /* ── Responsive ── */
         @media (min-width: 1280px) {
           .about-card-row { padding: 0 48px 80px; gap: 20px; }
         }
-
         @media (max-width: 1023px) {
           .about-wrapper   { padding-top: 110px; }
           .about-watermark { top: 110px; font-size: 160px; line-height: 170px; }
@@ -219,8 +277,9 @@ export default function About() {
           .floating-ticker-label { font-size: 36px; line-height: 40px; }
           .floating-ticker-outer { height: 60px; }
           .floating-ticker-diamond { width: 20px; height: 20px; }
+          .reveal-left  { transform: translateX(0) translateY(40px); }
+          .reveal-right { transform: translateX(0) translateY(40px); }
         }
-
         @media (max-width: 639px) {
           .about-wrapper   { padding-top: 90px; }
           .about-watermark { top: 90px; font-size: 100px; line-height: 110px; }
@@ -235,7 +294,6 @@ export default function About() {
           .floating-ticker-outer { height: 54px; }
           .floating-ticker-diamond { width: 16px; height: 16px; }
         }
-
         @media (max-width: 479px) {
           .about-wrapper   { padding-top: 72px; }
           .about-watermark { top: 72px; font-size: 64px; line-height: 72px; }
@@ -252,13 +310,14 @@ export default function About() {
         }
       `}</style>
 
-      <div className="about-wrapper" style={{ fontFamily: JAKARTA }}>
-        <div aria-hidden="true" className="about-watermark" style={{ fontFamily: JAKARTA }}>
+      <div className="about-wrapper" ref={sectionRef} style={{ fontFamily: JAKARTA }}>
+        <div aria-hidden="true" className="about-watermark" ref={watermarkRef} style={{ fontFamily: JAKARTA }}>
           NIRVANA
         </div>
 
         <div className="about-card-row">
-          <div className="about-text-card">
+          {/* Text card — slides in from left */}
+          <div className="about-text-card reveal-left" ref={textCardRef}>
             <div className="about-text-card-bg">
               <Image
                 src="/image.png"
@@ -271,10 +330,15 @@ export default function About() {
             </div>
 
             <div className="about-text-content">
-              <h1 className="about-h1" style={{ fontFamily: JAKARTA }}>
+              <h1 className="about-h1" ref={headingRef} style={{ fontFamily: JAKARTA }}>
                 From The<br />Founder&apos;s Notes.
               </h1>
-              <div style={{ flex: 1 }}>
+              {/* Paragraphs stagger in when card is in view */}
+              <div
+                ref={parasRef}
+                className="reveal-up"
+                style={{ flex: 1 }}
+              >
                 {paragraphs.map((text, i) => (
                   <p key={i} className="about-para" style={{ fontFamily: JAKARTA }}>{text}</p>
                 ))}
@@ -284,6 +348,7 @@ export default function About() {
               </div>
             </div>
 
+            {/* Stamp pops in after card lands */}
             <div className="about-stamp">
               <Image
                 src="/stamp.png"
@@ -295,7 +360,8 @@ export default function About() {
             </div>
           </div>
 
-          <div className="about-photo-card">
+          {/* Photo card — slides in from right, 150ms later */}
+          <div className="about-photo-card reveal-right" ref={photoCardRef}>
             <Image
               src="/about-image.png"
               alt="Xeus, Founder of Nirvana Academy"
@@ -321,7 +387,7 @@ export default function About() {
         </div>
       </div>
 
-      {/* ── FLOATING TILTED TICKER — tilts +1.03deg, scrolls RIGHT ─────────── */}
+      {/* Floating ticker */}
       <div style={{ width: "100%", overflow: "hidden", position: "relative", padding: "28px 0", backgroundColor: "#ffffff" }}>
         <div className="floating-ticker-outer">
           <div className="floating-ticker-track">
