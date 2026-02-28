@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+
 import { useEffect, useRef } from "react";
 
 const JAKARTA = "var(--font-jakarta, 'Plus Jakarta Sans', sans-serif)";
