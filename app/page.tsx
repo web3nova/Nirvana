@@ -1,35 +1,30 @@
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import Reveiw from "@/components/reveiw";
+ import Courses from "@/components/courses";
+ import Team from "@/components/team";
+ import Ecosystem from "@/components/ourecosystem";
+ import PartnershipSection from "@/components/Patnership";
 import Hero from "@/components/hero";
-import About from "@/components/About";
-<<<<<<< HEAD
-import Team from "@/components/team";
-import Faq from "@/components/faq";
 import Stats from "@/components/stats";
-=======
-import Partnership from "@/components/Patnership";  
->>>>>>> 9ffcadcb5dd60cf06e3da89714dcbdcc8ca420f1
+import About from "@/components/About";
+import Review from "@/components/reveiw";
+import Faq from "@/components/faq";
+import Contact from "@/components/contact";
 
 export default function Home() {
   return (
-    <div className="overflow-x-hidden">
+    <div className="bg-white min-h-screen">
       <Navbar />
       <Hero />
+      <About />
+      <Stats />
+      <Ecosystem/>
+      <Courses/>
+      < Review/>
+      <PartnershipSection/>
       <Team />
       <Faq />
-      <Stats />
-      <Reveiw />
-      <Contact />
-      <About />
-      <Reveiw />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-4">Welcome to My Next.js App</h1>
-        <p className="text-lg text-gray-700">
-          This is a simple Next.js application with a navbar and footer.
-        </p>
-      </main>
-      <Partnership />
+      <Contact/>
       <Footer />
     </div>
   );
