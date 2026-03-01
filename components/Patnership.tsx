@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /* ─── SVG Vectors ─── */
 const Vector2 = () => (
@@ -32,20 +32,18 @@ const RocketIcon = () => (
   </svg>
 );
 
-const CAROUSEL_IMAGES = [
-  { src: null,              bg: "#E7E9EE", label: "Event 1" },
-  { src: null,              bg: "#DDE4EE", label: "Event 2" },
-  { src: "/patnership.jpg", bg: "#F7F8F9", label: "Partnership" },
-  { src: null,              bg: "#E2E8F4", label: "Event 4" },
-  { src: null,              bg: "#EAF0F9", label: "Event 5" },
+/* ─── Static image row config ─── */
+// positions: far-left | near-left | CENTER | near-right | far-right
+const IMAGE_ROW = [
+  { src: null, bg: "#E2E8F0", w: 80,  h: 96  },
+  { src: null, bg: "#CBD5E1", w: 96,  h: 112 },
+  { src: "/patnership.jpg", bg: "#F1F5F9", w: 136, h: 152 },  // center — tallest
+  { src: null, bg: "#CBD5E1", w: 96,  h: 112 },
+  { src: null, bg: "#E2E8F0", w: 80,  h: 96  },
 ];
-const TOTAL = CAROUSEL_IMAGES.length;
-
-
 
 export default function PartnershipSection() {
-  const [activeImg, setActiveImg] = useState(2);
-  const [entered,   setEntered]   = useState(false);
+  const [entered, setEntered] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -58,14 +56,6 @@ export default function PartnershipSection() {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
-
-  useEffect(() => {
-    const id = setInterval(() => setActiveImg(p => (p + 1) % TOTAL), 2800);
-    return () => clearInterval(id);
-  }, []);
-
-  const prev = () => setActiveImg(p => (p - 1 + TOTAL) % TOTAL);
-  const next = () => setActiveImg(p => (p + 1) % TOTAL);
 
   return (
     <section
@@ -82,85 +72,50 @@ export default function PartnershipSection() {
         }
         @keyframes ps-fadeIn  { from{opacity:0} to{opacity:1} }
         @keyframes ps-scaleIn {
-          from { opacity:0; transform:scale(0.88); }
+          from { opacity:0; transform:scale(0.9); }
           to   { opacity:1; transform:scale(1); }
         }
         @keyframes ps-slideLeft  { from{opacity:0;transform:translateX(-40px)} to{opacity:1;transform:translateX(0)} }
         @keyframes ps-slideRight { from{opacity:0;transform:translateX(40px)}  to{opacity:1;transform:translateX(0)} }
 
-        .ps-enter-badge,.ps-enter-carousel,.ps-enter-heading,
-        .ps-enter-sub,.ps-enter-btn,.ps-enter-collab,
-        .ps-enter-arrow-tl,.ps-enter-arrow-tr,.ps-enter-arrow-bl,.ps-enter-arrow-br { opacity:0; }
+        .ps-enter-badge, .ps-enter-images, .ps-enter-heading,
+        .ps-enter-sub, .ps-enter-btn, .ps-enter-collab,
+        .ps-enter-arrow-tl, .ps-enter-arrow-tr,
+        .ps-enter-arrow-bl, .ps-enter-arrow-br { opacity: 0; }
 
         .entered .ps-enter-badge    { animation: ps-fadeIn   0.5s  0.05s ease both; }
-        .entered .ps-enter-carousel { animation: ps-scaleIn  0.7s  0.18s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-heading  { animation: ps-fadeUp   0.65s 0.32s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-sub      { animation: ps-fadeUp   0.55s 0.44s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-arrow-tl { animation: ps-slideLeft  0.6s 0.50s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-arrow-tr { animation: ps-slideRight 0.6s 0.50s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-arrow-bl { animation: ps-slideLeft  0.6s 0.58s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-arrow-br { animation: ps-slideRight 0.6s 0.58s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-btn      { animation: ps-scaleIn  0.7s  0.62s cubic-bezier(0.22,1,0.36,1) both; }
-        .entered .ps-enter-collab   { animation: ps-fadeUp   0.5s  0.78s ease both; }
-
-        /* ── Carousel slot ── */
-        .c-slot {
-          flex-shrink: 0;
-          border-radius: 14px;
-          overflow: hidden;
-          cursor: pointer;
-          /* width/height driven by inline style; transition handles movement */
-          transition:
-            width      0.48s cubic-bezier(0.34,1.2,0.64,1),
-            height     0.48s cubic-bezier(0.34,1.2,0.64,1),
-            transform  0.48s cubic-bezier(0.34,1.2,0.64,1),
-            opacity    0.48s ease,
-            box-shadow 0.48s ease,
-            filter     0.48s ease;
-        }
-        /* only the dead-centre slot gets the blue ring */
-        .c-slot.is-centre {
-          border-radius: 18px;
-          box-shadow: 0 0 0 3px #fff, 0 0 0 5px #2B7FFF, 0 16px 40px rgba(43,127,255,0.25);
-        }
-
-        /* dot */
-        .c-dot {
-          width:6px; height:6px; border-radius:50%;
-          background:#CBD5E1;
-          transition: all 0.3s ease;
-          cursor:pointer;
-        }
-        .c-dot.active { width:18px; border-radius:3px; background:#2B7FFF; }
-
-        /* nav */
-        .c-nav {
-          width:32px; height:32px; border-radius:50%;
-          border:1px solid #E2E8F0; background:#fff;
-          display:flex; align-items:center; justify-content:center;
-          cursor:pointer; font-size:16px; color:#555;
-          transition: background 0.2s, border-color 0.2s, transform 0.15s;
-        }
-        .c-nav:hover { background:#2B7FFF; border-color:#2B7FFF; color:#fff; transform:scale(1.08); }
+        .entered .ps-enter-images   { animation: ps-scaleIn  0.7s  0.18s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-heading  { animation: ps-fadeUp   0.65s 0.34s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-sub      { animation: ps-fadeUp   0.55s 0.46s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-arrow-tl { animation: ps-slideLeft  0.6s 0.52s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-arrow-tr { animation: ps-slideRight 0.6s 0.52s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-arrow-bl { animation: ps-slideLeft  0.6s 0.60s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-arrow-br { animation: ps-slideRight 0.6s 0.60s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-btn      { animation: ps-scaleIn  0.7s  0.64s cubic-bezier(0.22,1,0.36,1) both; }
+        .entered .ps-enter-collab   { animation: ps-fadeUp   0.5s  0.80s ease both; }
 
         /* partner button */
         @keyframes partnerPulse {
-          0%,100% { box-shadow:0 0 0 0 rgba(43,127,255,0.45); }
-          50%      { box-shadow:0 0 0 10px rgba(43,127,255,0); }
+          0%,100% { box-shadow: 0 0 0 0 rgba(43,127,255,0.45); }
+          50%      { box-shadow: 0 0 0 10px rgba(43,127,255,0); }
         }
         .partner-btn {
           transition: transform 0.18s ease, box-shadow 0.18s ease;
           animation: partnerPulse 2.8s ease-in-out infinite;
         }
         .partner-btn:hover {
-          transform:scale(1.018);
-          animation:none;
-          box-shadow:0 8px 40px rgba(43,127,255,0.38);
+          transform: scale(1.018);
+          animation-play-state: paused;
+          box-shadow: 0 8px 40px rgba(43,127,255,0.38);
         }
-        .partner-btn:active { transform:scale(0.97); box-shadow:none; }
+        .partner-btn:active {
+          transform: scale(0.97);
+          animation-play-state: paused;
+          box-shadow: 0 2px 12px rgba(43,127,255,0.2);
+        }
 
         .lets-talk-btn { transition: background 0.2s, transform 0.15s; }
-        .lets-talk-btn:hover { background:#d4e4fc !important; transform:scale(1.03); }
+        .lets-talk-btn:hover { background: #d4e4fc !important; transform: scale(1.03); }
       `}</style>
 
       <div className={`w-full flex flex-col items-center ${entered ? "entered" : ""}`}>
@@ -168,73 +123,58 @@ export default function PartnershipSection() {
         {/* Badge */}
         <div
           className="ps-enter-badge inline-flex items-center justify-center mb-10"
-          style={{ borderRadius:"9999px", border:"1px solid #2B7FFF", padding:"4px 14px" }}
+          style={{ borderRadius: "9999px", border: "1px solid #2B7FFF", padding: "4px 14px" }}
         >
-          <span style={{ color:"#2B7FFF", fontSize:"13px", fontWeight:500, whiteSpace:"nowrap" }}>
+          <span style={{ color: "#2B7FFF", fontSize: "13px", fontWeight: 500, whiteSpace: "nowrap" }}>
             Sponsorship x Partnership
           </span>
         </div>
 
-        {/* ── Carousel ── */}
-        <div className="ps-enter-carousel w-full flex flex-col items-center mb-10" style={{ maxWidth:"760px" }}>
-          <div
-            className="flex items-center justify-center w-full overflow-hidden"
-            style={{ gap:"10px", minHeight:"clamp(140px,20vw,190px)" }}
-          >
-            {CAROUSEL_IMAGES.map((img, i) => {
-              const slot = (i - activeImg + TOTAL) % TOTAL; // 0=active/centre
-
-              const sizes: Record<number, string> = {
-                0: "clamp(120px,18vw,170px)",
-                1: "clamp(70px,11vw,110px)",
-                2: "clamp(68px,10vw,100px)",
-                3: "clamp(68px,10vw,100px)",
-                4: "clamp(70px,11vw,110px)",
-              };
-              const opacities: Record<number, number> = { 0:1, 1:0.85, 2:0.65, 3:0.65, 4:0.85 };
-              const zIndexes:  Record<number, number> = { 0:10, 1:5, 2:1, 3:1, 4:5 };
-              const size    = sizes[slot]    ?? sizes[2];
-              const opacity = opacities[slot] ?? 0.65;
-              const zIndex  = zIndexes[slot]  ?? 1;
-
-              return (
-                <div
-                  key={i}
-                  className={`c-slot${slot === 0 ? " is-centre" : ""}`}
-                  onClick={() => setActiveImg(i)}
-                  style={{
-                    backgroundColor: img.bg,
-                    width:   size,
-                    height:  size,
-                    opacity,
-                    zIndex,
-                    transform: slot === 0 ? "scale(1.08)" : "scale(1)",
-                  }}
-                >
-                  {img.src && (
-                    <img src={img.src} alt={img.label} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Dots + nav */}
-          <div className="flex items-center justify-center gap-3 mt-5">
-            <button className="c-nav" onClick={prev} aria-label="Prev">‹</button>
-            <div className="flex items-center gap-[6px]">
-              {CAROUSEL_IMAGES.map((_, i) => (
-                <div key={i} className={`c-dot${activeImg === i ? " active" : ""}`} onClick={() => setActiveImg(i)} />
-              ))}
-            </div>
-            <button className="c-nav" onClick={next} aria-label="Next">›</button>
-          </div>
+        {/* ── Static Image Row ── */}
+        <div
+          className="ps-enter-images flex items-end justify-center mb-10"
+          style={{ gap: "10px" }}
+        >
+          {IMAGE_ROW.map((img, i) => {
+            const isCenter = i === 2;
+            return (
+              <div
+                key={i}
+                style={{
+                  width:        img.w,
+                  height:       img.h,
+                  borderRadius: isCenter ? 18 : 12,
+                  overflow:     "hidden",
+                  background:   img.bg,
+                  flexShrink:   0,
+                  boxShadow:    isCenter
+                    ? "0 0 0 3px #fff, 0 0 0 5px #2B7FFF, 0 12px 32px rgba(43,127,255,0.18)"
+                    : "none",
+                }}
+              >
+                {img.src && (
+                  <img
+                    src={img.src}
+                    alt="Partnership"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* Heading */}
         <h2
           className="ps-enter-heading text-center mb-4"
-          style={{ fontWeight:500, fontSize:"clamp(28px,4.5vw,48px)", lineHeight:"1.05", letterSpacing:"-0.05em", color:"#030303", maxWidth:"520px" }}
+          style={{
+            fontWeight:    500,
+            fontSize:      "clamp(28px,4.5vw,48px)",
+            lineHeight:    "1.05",
+            letterSpacing: "-0.05em",
+            color:         "#030303",
+            maxWidth:      "520px",
+          }}
         >
           Partner with the Community
         </h2>
@@ -242,69 +182,80 @@ export default function PartnershipSection() {
         {/* Subtext */}
         <p
           className="ps-enter-sub text-center mb-12"
-          style={{ fontWeight:500, fontSize:"clamp(14px,2vw,18px)", lineHeight:"150%", letterSpacing:"-0.02em", color:"#6F6F6F", maxWidth:"420px", padding:"0 8px" }}
+          style={{
+            fontWeight:    500,
+            fontSize:      "clamp(14px,2vw,18px)",
+            lineHeight:    "150%",
+            letterSpacing: "-0.02em",
+            color:         "#6F6F6F",
+            maxWidth:      "420px",
+            padding:       "0 8px",
+          }}
         >
           Collaborate with a thriving Web3 community through events, drops, and education. Let's build the future together!
         </p>
 
         {/* Arrows + Button */}
-        <div className="relative flex items-center justify-center w-full mb-10" style={{ maxWidth:"960px", minHeight:"220px" }}>
-          <div className="ps-enter-arrow-tl absolute hidden md:block pointer-events-none" style={{ width:"80px", height:"68px", left:"20px", top:"10px", transform:"rotate(-10deg)" }}><Vector2 /></div>
-          <div className="ps-enter-arrow-tr absolute hidden md:block pointer-events-none" style={{ width:"80px", height:"68px", right:"20px", top:"10px", transform:"rotate(10deg)" }}><Vector4 /></div>
-          <div className="ps-enter-arrow-bl absolute hidden md:block pointer-events-none" style={{ width:"86px", height:"61px", left:"20px", bottom:"10px", transform:"rotate(10deg)" }}><Vector3 /></div>
-          <div className="ps-enter-arrow-br absolute hidden md:block pointer-events-none" style={{ width:"86px", height:"61px", right:"20px", bottom:"10px", transform:"rotate(-10deg)" }}><Vector5 /></div>
+        <div
+          className="relative flex items-center justify-center w-full mb-10"
+          style={{ maxWidth: "960px", minHeight: "220px" }}
+        >
+          <div className="ps-enter-arrow-tl absolute hidden md:block pointer-events-none" style={{ width: "80px", height: "68px", left: "20px", top: "10px",    transform: "rotate(-10deg)" }}><Vector2 /></div>
+          <div className="ps-enter-arrow-tr absolute hidden md:block pointer-events-none" style={{ width: "80px", height: "68px", right: "20px", top: "10px",   transform: "rotate(10deg)"  }}><Vector4 /></div>
+          <div className="ps-enter-arrow-bl absolute hidden md:block pointer-events-none" style={{ width: "86px", height: "61px", left: "20px", bottom: "10px", transform: "rotate(10deg)"  }}><Vector3 /></div>
+          <div className="ps-enter-arrow-br absolute hidden md:block pointer-events-none" style={{ width: "86px", height: "61px", right: "20px", bottom: "10px",transform: "rotate(-10deg)" }}><Vector5 /></div>
 
           <button
             className="ps-enter-btn partner-btn flex items-center justify-center"
             style={{
-              width:"clamp(240px,68vw,654.53px)",
-              height:"clamp(72px,14vw,174.74px)",
-              borderRadius:"110.04px",
-              paddingTop:"30.19px", paddingRight:"62.39px",
-              paddingBottom:"30.19px", paddingLeft:"62.39px",
-              background:"#2B7FFF",
-              border:"3px solid rgba(255,255,255,0.25)",
-              outline:"3px solid rgba(43,127,255,0.35)",
-              cursor:"pointer",
+              width:          "clamp(240px,68vw,654px)",
+              height:         "clamp(72px,14vw,175px)",
+              borderRadius:   "110px",
+              paddingBlock:   "30px",
+              paddingInline:  "62px",
+              background:     "#2B7FFF",
+              border:         "3px solid rgba(255,255,255,0.25)",
+              outline:        "3px solid rgba(43,127,255,0.35)",
+              cursor:         "pointer",
             }}
           >
-            <span style={{ fontWeight:700, fontSize:"clamp(20px,4vw,44px)", color:"#fff", letterSpacing:"-0.02em" }}>
+            <span style={{ fontWeight: 700, fontSize: "clamp(20px,4vw,44px)", color: "#fff", letterSpacing: "-0.02em" }}>
               Partner now
             </span>
           </button>
         </div>
 
-        {/* ── Have a custom collaboration — FIXED mobile layout ── */}
+        {/* Have a custom collaboration */}
         <div className="ps-enter-collab w-full flex justify-center px-4">
           <div
             className="flex flex-row items-center justify-center flex-wrap gap-3 w-full sm:w-auto"
             style={{
-              maxWidth:"477px",
-              minHeight:"64px",
-              borderRadius:"16777200px",
-              border:"1px solid #E5E7EB",
-              padding:"10px 16px",
-              background:"#fff",
+              maxWidth:     "477px",
+              minHeight:    "64px",
+              borderRadius: "9999px",
+              border:       "1px solid #E5E7EB",
+              padding:      "10px 16px",
+              background:   "#fff",
             }}
           >
             <div className="flex items-center gap-2 shrink-0">
               <RocketIcon />
-              <span style={{ fontWeight:500, fontSize:"14px", color:"#6F6F6F", whiteSpace:"nowrap" }}>
+              <span style={{ fontWeight: 500, fontSize: "14px", color: "#6F6F6F", whiteSpace: "nowrap" }}>
                 Have a custom collaboration in mind?
               </span>
             </div>
             <button
               className="lets-talk-btn flex items-center justify-center shrink-0"
               style={{
-                borderRadius:"9999px",
-                border:"1px solid rgba(43,127,255,0.5)",
-                background:"#E7EFFD",
-                padding:"8px 18px",
-                cursor:"pointer",
-                whiteSpace:"nowrap",
+                borderRadius: "9999px",
+                border:       "1px solid rgba(43,127,255,0.5)",
+                background:   "#E7EFFD",
+                padding:      "8px 18px",
+                cursor:       "pointer",
+                whiteSpace:   "nowrap",
               }}
             >
-              <span style={{ fontWeight:500, fontSize:"14px", color:"#2B7FFF" }}>Let's Talk →</span>
+              <span style={{ fontWeight: 500, fontSize: "14px", color: "#2B7FFF" }}>Let's Talk →</span>
             </button>
           </div>
         </div>

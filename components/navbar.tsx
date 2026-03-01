@@ -4,8 +4,35 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const leftLinks  = ["Home", "Articles", "Course"];
-const rightLinks = ["Events", "Team"];
+const leftLinks = [
+  { label: "Home",     href: "#hero-section", isAnchor: true  },
+  { label: "Articles", href: "#articles",      isAnchor: true  },
+];
+
+const rightLinks = [
+  { label: "Events",   href: "/Events",        isAnchor: false },
+  { label: "Team",     href: "#team",           isAnchor: true  },
+];
+
+// "Course" sits between logo on mobile menu, and we add it to desktop left side
+const allLinks = [
+  { label: "Home",     href: "#hero-section", isAnchor: true  },
+  { label: "Articles", href: "#articles",      isAnchor: true  },
+  { label: "Course",   href: "#courses",       isAnchor: true  },
+  { label: "Events",   href: "/Events",        isAnchor: false },
+  { label: "Team",     href: "#team",           isAnchor: true  },
+];
+
+const desktopLeft = [
+  { label: "Home",     href: "#hero-section", isAnchor: true  },
+  { label: "Articles", href: "#articles",      isAnchor: true  },
+  { label: "Course",   href: "#courses",       isAnchor: true  },
+];
+
+const desktopRight = [
+  { label: "Events",   href: "/Events",        isAnchor: false },
+  { label: "Team",     href: "#team",           isAnchor: true  },
+];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,7 +54,19 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  /* ── shared font style for all nav text ── */
+  const handleAnchorClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    isAnchor: boolean
+  ) => {
+    if (!isAnchor) return; // let Next.js handle page navigation
+    if (!href.startsWith("#")) return;
+    e.preventDefault();
+    setMenuOpen(false);
+    const el = document.getElementById(href.slice(1));
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const navFont: React.CSSProperties = {
     fontFamily   : "'Plus Jakarta Sans', sans-serif",
     fontWeight   : 500,
@@ -36,25 +75,24 @@ export default function Navbar() {
     letterSpacing: "-0.02em",
   };
 
-  /* ── exact button spec from design ── */
   const btnStyle: React.CSSProperties = {
-    height       : 50,
-    borderRadius : 61,
-    gap          : 10,
-    paddingTop   : 15,
-    paddingRight : 31,
-    paddingBottom: 15,
-    paddingLeft  : 31,
-    background   : "#2B7FFF",
-    color        : "#fff",
-    display      : "inline-flex",
-    alignItems   : "center",
+    height        : 50,
+    borderRadius  : 61,
+    gap           : 10,
+    paddingTop    : 15,
+    paddingRight  : 31,
+    paddingBottom : 15,
+    paddingLeft   : 31,
+    background    : "#2B7FFF",
+    color         : "#fff",
+    display       : "inline-flex",
+    alignItems    : "center",
     justifyContent: "center",
-    whiteSpace   : "nowrap",
+    whiteSpace    : "nowrap",
     ...navFont,
-    fontWeight   : 600,
-    transition   : "background .2s ease, transform .15s ease",
-    boxShadow    : "0 0 22px rgba(43,127,255,.4)",
+    fontWeight    : 600,
+    transition    : "background .2s ease, transform .15s ease",
+    boxShadow     : "0 0 22px rgba(43,127,255,.4)",
   };
 
   return (
@@ -62,7 +100,6 @@ export default function Navbar() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-        /* underline hover on nav links */
         .nav-lnk { position: relative; }
         .nav-lnk::after {
           content: ''; position: absolute;
@@ -73,14 +110,12 @@ export default function Navbar() {
         }
         .nav-lnk:hover::after { width: 100%; }
 
-        /* navbar slide-in */
         @keyframes navDown {
           from { opacity: 0; transform: translateY(-18px); }
           to   { opacity: 1; transform: translateY(0); }
         }
         .nav-enter { animation: navDown .32s cubic-bezier(.22,1,.36,1) forwards; }
 
-        /* mobile menu */
         @keyframes mobDown {
           from { opacity: 0; transform: translateY(-8px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -104,7 +139,6 @@ export default function Navbar() {
           position     : "fixed",
           top          : 0, left: 0, right: 0,
           zIndex       : 50,
-          /* equal padding all sides on mobile: 10px; desktop: 12px */
           padding      : "10px 10px 0",
           opacity      : visible ? 1 : 0,
           pointerEvents: visible ? "auto" : "none",
@@ -125,31 +159,31 @@ export default function Navbar() {
             transition          : "border-radius .22s ease",
           }}
         >
-          {/* ── NAV BAR ── */}
+          {/* NAV BAR */}
           <nav className="h-[64px] flex items-center justify-between px-5 md:px-8 relative">
 
             {/* LEFT — desktop */}
             <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-              {leftLinks.map(l => (
-                <li key={l}>
-                  <Link href={`/${l.toLowerCase()}`}
+              {desktopLeft.map(({ label, href, isAnchor }) => (
+                <li key={label}>
+                  <a
+                    href={href}
                     className="nav-lnk"
-                    style={{ ...navFont, color: "rgba(255,255,255,.82)" }}>
-                    {l}
-                  </Link>
+                    style={{ ...navFont, color: "rgba(255,255,255,.82)" }}
+                    onClick={(e) => handleAnchorClick(e, href, isAnchor)}
+                  >
+                    {label}
+                  </a>
                 </li>
               ))}
             </ul>
 
-            {/* CENTER LOGO — desktop: absolute center | mobile: left */}
-            <Link
-              href="/"
+            {/* CENTER LOGO */}
+            <a
+              href="#hero-section"
               className="flex items-center gap-[10px] md:absolute md:left-1/2 md:-translate-x-1/2"
+              onClick={(e) => handleAnchorClick(e, "#hero-section", true)}
             >
-              {/* 
-                Logo image from /public folder.
-                Name your file "logo.svg" (or adjust src below).
-              */}
               <Image
                 src="/logo.svg"
                 alt="Nirvana Academy"
@@ -158,23 +192,32 @@ export default function Navbar() {
                 style={{ objectFit: "contain" }}
                 priority
               />
-            </Link>
+            </a>
 
             {/* RIGHT — desktop */}
             <div className="hidden md:flex items-center gap-8">
-              {rightLinks.map(l => (
-                <Link key={l} href={`/${l.toLowerCase()}`}
+              {desktopRight.map(({ label, href, isAnchor }) => (
+                <a
+                  key={label}
+                  href={href}
                   className="nav-lnk"
-                  style={{ ...navFont, color: "rgba(255,255,255,.82)" }}>
-                  {l}
-                </Link>
+                  style={{ ...navFont, color: "rgba(255,255,255,.82)" }}
+                  onClick={(e) => handleAnchorClick(e, href, isAnchor)}
+                >
+                  {label}
+                </a>
               ))}
-              <Link href="/join" className="join-btn" style={btnStyle}>
+              <a
+                href="#contact"
+                className="join-btn"
+                style={btnStyle}
+                onClick={(e) => handleAnchorClick(e, "#contact", true)}
+              >
                 Join Nirvana
-              </Link>
+              </a>
             </div>
 
-            {/* HAMBURGER — mobile only */}
+            {/* HAMBURGER — mobile */}
             <button
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               onClick={() => setMenuOpen(v => !v)}
@@ -192,19 +235,18 @@ export default function Navbar() {
             </button>
           </nav>
 
-          {/* ── MOBILE DROPDOWN ── */}
+          {/* MOBILE DROPDOWN */}
           {menuOpen && (
             <div
               className="mob-menu md:hidden"
               style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}
             >
-              {/* 2-col grid of links */}
               <div className="grid grid-cols-2 gap-[6px] p-3">
-                {[...leftLinks, ...rightLinks].map(l => (
-                  <Link
-                    key={l}
-                    href={`/${l.toLowerCase()}`}
-                    onClick={() => setMenuOpen(false)}
+                {allLinks.map(({ label, href, isAnchor }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    onClick={(e) => handleAnchorClick(e, href, isAnchor)}
                     className="mob-lnk"
                     style={{
                       ...navFont,
@@ -215,23 +257,21 @@ export default function Navbar() {
                       border      : "1px solid rgba(255,255,255,.06)",
                     }}
                   >
-                    {l}
+                    {label}
                     <svg className="mob-arrow w-4 h-4" fill="none" viewBox="0 0 16 16"
                       style={{ color: "rgba(255,255,255,.38)" }}>
                       <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                  </Link>
+                  </a>
                 ))}
               </div>
 
-              {/* divider */}
               <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "0 12px" }} />
 
-              {/* Join CTA full-width */}
               <div className="p-3">
-                <Link
-                  href="/join"
-                  onClick={() => setMenuOpen(false)}
+                <a
+                  href="#contact"
+                  onClick={(e) => handleAnchorClick(e, "#contact", true)}
                   className="join-btn flex items-center justify-center gap-2 w-full"
                   style={{
                     ...btnStyle,
@@ -248,7 +288,7 @@ export default function Navbar() {
                   <svg width="15" height="15" fill="none" viewBox="0 0 16 16">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </Link>
+                </a>
               </div>
             </div>
           )}
