@@ -15,21 +15,17 @@ const stats = [
     { bgText: "Followings", number: "21K",  label: "Twitter followings", height: "320px", raw: 21000, suffix: "K",   divisor: 1000 },
 ];
 
-/* ── Easing ── */
 function easeOutExpo(t: number) {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 }
 
-/* ── Single counting number hook ── */
 function useCountUp(target: number, duration: number, started: boolean) {
     const [count, setCount] = useState(0);
     const rafRef = useRef<number>(0);
 
     useEffect(() => {
         if (!started) return;
-
         const startTime = performance.now();
-
         const tick = (now: number) => {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
@@ -37,7 +33,6 @@ function useCountUp(target: number, duration: number, started: boolean) {
             setCount(Math.round(eased * target));
             if (progress < 1) rafRef.current = requestAnimationFrame(tick);
         };
-
         rafRef.current = requestAnimationFrame(tick);
         return () => cancelAnimationFrame(rafRef.current);
     }, [started, target, duration]);
@@ -45,7 +40,6 @@ function useCountUp(target: number, duration: number, started: boolean) {
     return count;
 }
 
-/* ── Individual stat card ── */
 function StatCard({
     stat,
     index,
@@ -58,7 +52,6 @@ function StatCard({
     const cardElRef = useRef<HTMLDivElement | null>(null);
     const [visible, setVisible] = useState(false);
 
-    /* Intersection observer — starts counter when card enters viewport */
     useEffect(() => {
         const el = cardElRef.current;
         if (!el) return;
@@ -70,7 +63,6 @@ function StatCard({
         return () => obs.disconnect();
     }, []);
 
-    /* Staggered start per card */
     const [started, setStarted] = useState(false);
     useEffect(() => {
         if (!visible) return;
@@ -78,11 +70,8 @@ function StatCard({
         return () => clearTimeout(t);
     }, [visible, index]);
 
-    /* The actual count — always counts in whole display units */
     const displayTarget = stat.divisor > 1 ? stat.raw / stat.divisor : stat.raw;
     const counted = useCountUp(displayTarget, 1800, started);
-
-    /* Format display string */
     const display = `${counted}${stat.suffix}`;
 
     return (
@@ -112,7 +101,6 @@ function StatCard({
                 <span
                     className="text-4xl md:text-[54px] font-bold text-gray-900 leading-none mb-1 tracking-[-0.05em] tabular-nums"
                     style={{
-                        /* Subtle scale-in as counting starts */
                         transition: "transform 0.3s ease",
                         transform : started ? "scale(1)" : "scale(0.88)",
                     }}
@@ -124,13 +112,13 @@ function StatCard({
                 </span>
             </div>
 
-            {/* Flash highlight that fires once counting starts */}
+            {/* Flash highlight */}
             {started && (
                 <span
                     className="absolute inset-0 rounded-[32px] pointer-events-none"
                     style={{
-                        background : "radial-gradient(ellipse at 50% 40%, rgba(59,130,246,0.10) 0%, transparent 70%)",
-                        animation  : "flashIn 0.6s ease forwards",
+                        background: "radial-gradient(ellipse at 50% 40%, rgba(59,130,246,0.10) 0%, transparent 70%)",
+                        animation : "flashIn 0.6s ease forwards",
                     }}
                 />
             )}
@@ -138,7 +126,6 @@ function StatCard({
     );
 }
 
-/* ── Main export ── */
 export default function Stats() {
     const [centers, setCenters] = useState<{ x: number; y: number }[]>([]);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -146,7 +133,6 @@ export default function Stats() {
         x: 0, y: 0, angle: 0, opacity: 0, scaleX: 1, scaleY: 1,
     });
 
-    /* Layout measurement */
     useEffect(() => {
         const updateLayout = () => {
             const newCenters: { x: number; y: number }[] = [];
@@ -168,7 +154,6 @@ export default function Stats() {
         return () => { clearTimeout(t); window.removeEventListener("resize", updateLayout); };
     }, []);
 
-    /* Bouncing arrow animation */
     const animRef = useRef({
         index: 0, t: 0,
         phase: "fading_in" as
@@ -267,8 +252,9 @@ export default function Stats() {
 
     return (
         <section className="py-16 md:py-24 bg-white w-full overflow-hidden">
-            {/* Keyframe for card flash */}
             <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
+
                 @keyframes flashIn {
                     0%   { opacity: 0; }
                     30%  { opacity: 1; }
@@ -282,9 +268,26 @@ export default function Stats() {
 
                         {/* Header */}
                         <div className="relative md:absolute top-0 left-0 md:left-4 z-30 mb-8 md:mb-0 text-center md:text-left">
-                            <h2 className="text-[28px] sm:text-[32px] md:text-[44px] font-medium text-black leading-[1.1] md:leading-[1.05] tracking-[-0.05em]">
-                                Our numbers don't{" "}
-                                <span className="font-[family-name:var(--font-nanum-pen)] text-[40px] sm:text-[44px] md:text-[60px] leading-none align-baseline tracking-normal">
+                            <h2 style={{
+                                fontFamily   : "'Plus Jakarta Sans', sans-serif",
+                                fontWeight   : 500,
+                                fontSize     : "clamp(24px, 3.5vw, 37.34px)",
+                                lineHeight   : "44.5px",
+                                letterSpacing: "-0.05em",
+                                color        : "#111111",
+                                margin       : 0,
+                                padding      : 0,
+                            }}>
+                                Our numbers don&apos;t{" "}
+                                <span style={{
+                                    fontFamily   : "'Nanum Brush Script', cursive",
+                                    fontWeight   : 400,
+                                    fontSize     : "clamp(38px, 5.5vw, 61.46px)",
+                                    lineHeight   : "44.5px",
+                                    letterSpacing: "-0.05em",
+                                    display      : "inline",
+                                    verticalAlign: "baseline",
+                                }}>
                                     lie
                                 </span>
                                 , they
@@ -326,10 +329,10 @@ export default function Stats() {
                                 <div
                                     className="absolute left-0 top-0 z-20 pointer-events-none flex items-center justify-center will-change-transform"
                                     style={{
-                                        transform: `translate(${renderState.x}px,${renderState.y}px) scale(${renderState.scaleX},${renderState.scaleY}) translate(-12px,-12px) rotate(${renderState.angle}deg)`,
-                                        opacity  : renderState.opacity,
-                                        width    : "24px",
-                                        height   : "24px",
+                                        transform      : `translate(${renderState.x}px,${renderState.y}px) scale(${renderState.scaleX},${renderState.scaleY}) translate(-12px,-12px) rotate(${renderState.angle}deg)`,
+                                        opacity        : renderState.opacity,
+                                        width          : "24px",
+                                        height         : "24px",
                                         transformOrigin: "50% 50%",
                                     }}
                                 >

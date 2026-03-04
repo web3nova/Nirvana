@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 
-/* ── Keyframes injected once — only what Tailwind can't express ── */
 const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
@@ -41,17 +40,6 @@ const STYLES = `
   .anim-card     { animation: cardUp     0.65s cubic-bezier(0.22,0.68,0,1.05) both; }
   .anim-check    { animation: checkPop   0.3s  cubic-bezier(0.34,1.56,0.64,1) both; }
 
-  /* pill dot */
-  .pill-dot::before {
-    content: '';
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: #2B7FFF;
-    flex-shrink: 0;
-    display: inline-block;
-  }
-
-  /* enroll button hover — vibrate + colour swap */
   .enroll-btn {
     transition: background 0.28s ease, box-shadow 0.28s ease;
   }
@@ -66,7 +54,6 @@ const STYLES = `
   .enroll-text { transition: color 0.28s ease; }
 `;
 
-/* ── IntersectionObserver hook ── */
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -83,12 +70,11 @@ function useInView(threshold = 0.1) {
   return { ref, visible };
 }
 
-/* ── Data ── */
 const stats = [
   {
     label: "12 Weeks\nIntensive",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5a5a72" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
       </svg>
     ),
@@ -96,7 +82,7 @@ const stats = [
   {
     label: "Cohort-Based\nLearning",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5a5a72" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
         <circle cx="9" cy="7" r="4"/>
         <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
@@ -107,7 +93,7 @@ const stats = [
   {
     label: "Hands-on\nProjects",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5a5a72" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="16 18 22 12 16 6"/>
         <polyline points="8 6 2 12 8 18"/>
       </svg>
@@ -116,7 +102,7 @@ const stats = [
   {
     label: "Certificate of\nCompletion",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5a5a72" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="8" r="6"/>
         <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
       </svg>
@@ -139,7 +125,6 @@ export default function Courses() {
     <>
       <style>{STYLES}</style>
 
-      {/* Section — reduced bottom padding pb-10 instead of pb-20 */}
       <section
         className="w-full bg-white flex flex-col items-center pt-12 pb-10 px-6"
         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
@@ -148,19 +133,47 @@ export default function Courses() {
         {/* ── Header block ── */}
         <div ref={topRef.ref} className="flex flex-col items-center w-full max-w-[900px]">
 
-          {/* Latest Course pill */}
+          {/* Latest Course pill — exact specs */}
           <a
             href="#"
-            className={`pill-dot inline-flex items-center gap-[7px] border border-[rgba(43,127,255,0.3)] rounded-full px-[18px] py-[6px] text-[12.5px] font-medium text-[#2B7FFF] bg-[rgba(43,127,255,0.04)] no-underline mb-[18px] hover:bg-[rgba(43,127,255,0.09)] transition-colors ${topRef.visible ? "anim-fade-in" : "opacity-0"}`}
-            style={{ animationDelay: "0ms" }}
+            className={`inline-flex items-center justify-center no-underline mb-[18px] hover:bg-[rgba(43,127,255,0.06)] transition-colors ${topRef.visible ? "anim-fade-in" : "opacity-0"}`}
+            style={{
+              animationDelay: "0ms",
+              width: "123px",
+              height: "32px",
+              gap: "4px",
+              borderRadius: "16777200px",
+              paddingTop: "4px",
+              paddingRight: "10px",
+              paddingBottom: "4px",
+              paddingLeft: "10px",
+              border: "1px solid rgba(43, 127, 255, 0.30)",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 500,
+              fontSize: "16px",
+              lineHeight: "24px",
+              letterSpacing: "-0.31px",
+              textAlign: "center",
+              color: "#1a1916",
+              boxSizing: "border-box",
+            }}
           >
             Latest Course
           </a>
 
           {/* Subtitle */}
           <p
-            className={`text-[14px] text-[#888884] text-center leading-[22px] font-normal mb-[10px] ${topRef.visible ? "anim-fade-up" : "opacity-0"}`}
-            style={{ animationDelay: "70ms" }}
+            className={`text-center text-[#888884] mb-[10px] ${topRef.visible ? "anim-fade-up" : "opacity-0"}`}
+            style={{
+              animationDelay: "70ms",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 500,
+              fontSize: "18px",
+              lineHeight: "100%",
+              letterSpacing: "-0.36px",
+              textAlign: "center",
+              margin: "0 0 10px 0",
+            }}
           >
             Our battle-tested course turns novices into DeFi warriors.<br />
             Learn the game, win the trades.
@@ -168,11 +181,17 @@ export default function Courses() {
 
           {/* Title */}
           <h1
-            className={`text-center font-normal text-[#1a1916] leading-none mb-10 ${topRef.visible ? "anim-title" : "opacity-0"}`}
+            className={`text-[#1a1916] ${topRef.visible ? "anim-title" : "opacity-0"}`}
             style={{
               fontFamily: "'Nanum Pen Script', cursive",
-              fontSize: "clamp(46px, 8vw, 64px)",
+              fontWeight: 400,
+              fontSize: "78px",
+              lineHeight: "53.2px",
+              letterSpacing: "-3.9px",
+              textAlign: "center",
+              textTransform: "capitalize",
               animationDelay: "140ms",
+              margin: "16px 0 40px 0",
             }}
           >
             Koinophobia
@@ -185,70 +204,158 @@ export default function Courses() {
           className={`w-full max-w-[900px] ${cardRef.visible ? "anim-card" : "opacity-0"}`}
           style={{ animationDelay: "80ms" }}
         >
-          {/* Card: row on desktop, col on mobile */}
-          <div className="flex flex-col sm:flex-row rounded-[20px] overflow-hidden shadow-[0_4px_48px_rgba(0,0,0,0.11)] min-h-[520px] sm:min-h-[480px]">
+          <div
+            className="flex flex-col sm:flex-row rounded-[20px] overflow-hidden"
+            style={{
+              minHeight: "460px",
+              boxShadow: "0 4px 48px rgba(0,0,0,0.11)",
+            }}
+          >
 
-            {/* ── Left black panel (~62%) ── */}
-            <div className="bg-[#0a0a0a] flex flex-col justify-between p-7 sm:flex-[62] w-full sm:w-auto min-h-[200px] sm:min-h-0">
-              {/* Coming soon badge — top right */}
+            {/* ── Left black panel (~55%) ── */}
+            <div
+              className="bg-[#0a0a0a] flex flex-col justify-between p-7 w-full"
+              style={{ flex: "0 0 55%" }}
+            >
               <div className="flex justify-end">
-                <span className="bg-white/[0.07] border border-white/[0.14] rounded-full px-[14px] py-[5px] text-[11px] text-white/70 font-medium tracking-[0.2px]">
+                <span
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.14)",
+                    borderRadius: "9999px",
+                    padding: "5px 14px",
+                    fontSize: "11px",
+                    color: "rgba(255,255,255,0.7)",
+                    fontWeight: 500,
+                    letterSpacing: "0.2px",
+                  }}
+                >
                   Coming soon
                 </span>
               </div>
 
-              {/* Push description to bottom */}
               <div className="flex-1" />
 
-              <p className="text-[13px] text-white/40 leading-[21px] font-light m-0 max-w-[260px]">
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "13px",
+                  lineHeight: "21px",
+                  fontWeight: 300,
+                  color: "rgba(255,255,255,0.4)",
+                  maxWidth: "260px",
+                }}
+              >
                 Master crypto trading with our flagship course — your ticket to life-changing wins.
               </p>
             </div>
 
-            {/* ── Right panel (~38%) ── */}
-            <div className="bg-[#F7F8F9] sm:flex-[38] flex flex-col justify-between gap-[22px] p-6 sm:p-7 min-w-0">
+            {/* ── Right panel (~45%) ── */}
+            <div
+              className="flex flex-col justify-between w-full"
+              style={{
+                flex: "0 0 45%",
+                background: "#F7F8F9",
+                padding: "24px",
+                gap: "20px",
+              }}
+            >
+              <div className="flex flex-col" style={{ gap: "18px" }}>
 
-              <div className="flex flex-col gap-[18px]">
-
-                {/* Stats 2×2 grid */}
-                <div className="grid grid-cols-2 gap-[10px]">
+                {/* Stats — 4 dark boxes in a row */}
+                <div className="flex w-full gap-[8px]" style={{ paddingBottom: "18px", borderBottom: "1px solid #e4e6ea" }}>
                   {stats.map((stat, i) => (
                     <div
                       key={i}
-                      className={`bg-white border border-[rgba(43,127,255,0.3)] rounded-xl p-[14px] flex flex-col gap-3 ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
-                      style={{ animationDelay: `${240 + i * 55}ms` }}
+                      className={`flex flex-col justify-between ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
+                      style={{
+                        flex: 1,
+                        background: "#FFFFFF",
+                        borderRadius: "4.72px",
+                        overflow: "hidden",
+                        minHeight: "117px",
+                        animationDelay: `${240 + i * 55}ms`,
+                      }}
                     >
-                      {stat.icon}
-                      <span
-                        className="text-[13px] font-medium text-[#1a1916] leading-[18px] tracking-[-0.13px] whitespace-pre-line"
+                      {/* Inner dark area for icon + text */}
+                      <div
+                        style={{
+                          background: "#333333CC",
+                          paddingTop: "34.95px",
+                          paddingRight: "9.44px",
+                          paddingBottom: "14.17px",
+                          paddingLeft: "9.44px",
+                          gap: "7.56px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          height: "100%",
+                        }}
                       >
-                        {stat.label}
-                      </span>
+                        <div style={{ color: "rgba(255,255,255,0.6)" }}>{stat.icon}</div>
+                        <span
+                          style={{
+                            fontFamily: "'Plus Jakarta Sans', sans-serif",
+                            fontWeight: 500,
+                            fontSize: "14px",
+                            lineHeight: "18.89px",
+                            letterSpacing: "-0.14px",
+                            color: "#ffffff",
+                            whiteSpace: "pre-line",
+                          }}
+                        >
+                          {stat.label}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Divider */}
-                <div className="h-px bg-[#e4e6ea]" />
-
                 {/* What You'll Learn */}
                 <div>
                   <p
-                    className={`text-[13px] font-semibold text-[#1a1916] tracking-[-0.13px] mb-3 ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
-                    style={{ animationDelay: "370ms" }}
+                    className={`${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
+                    style={{
+                      fontFamily: "'Plus Jakarta Sans', sans-serif",
+                      fontWeight: 600,
+                      fontSize: "21px",
+                      lineHeight: "26.45px",
+                      letterSpacing: "-0.42px",
+                      color: "#1a1916",
+                      margin: "0 0 12px 0",
+                      animationDelay: "370ms",
+                    }}
                   >
                     What You'll Learn
                   </p>
-                  <ul className="m-0 p-0 list-none flex flex-col gap-[11px]">
+                  <ul className="m-0 p-0 list-none flex flex-col" style={{ gap: "11px" }}>
                     {learnItems.map((item, i) => (
                       <li
                         key={i}
-                        className={`flex items-start gap-[10px] text-[13px] text-[#4a4845] leading-[18px] tracking-[-0.13px] ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
-                        style={{ animationDelay: `${410 + i * 45}ms` }}
+                        className={`flex items-start ${cardRef.visible ? "anim-fade-up" : "opacity-0"}`}
+                        style={{
+                          gap: "10px",
+                          fontSize: "13px",
+                          color: "#4a4845",
+                          lineHeight: "18px",
+                          letterSpacing: "-0.13px",
+                          animationDelay: `${410 + i * 45}ms`,
+                        }}
                       >
                         <span
-                          className={`w-[18px] h-[18px] rounded-full bg-[rgba(43,127,255,0.08)] border border-[rgba(43,127,255,0.2)] flex items-center justify-center shrink-0 text-[9px] text-[#2B7FFF] font-bold ${cardRef.visible ? "anim-check" : "opacity-0"}`}
-                          style={{ animationDelay: `${425 + i * 45}ms` }}
+                          className={`flex items-center justify-center shrink-0 ${cardRef.visible ? "anim-check" : "opacity-0"}`}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            borderRadius: "50%",
+                            background: "#ebebeb",
+                            border: "1px solid #d8d8d8",
+                            fontSize: "8px",
+                            color: "#555",
+                            fontWeight: 700,
+                            animationDelay: `${425 + i * 45}ms`,
+                            marginTop: "1px",
+                          }}
                         >
                           ✓
                         </span>
@@ -265,18 +372,30 @@ export default function Courses() {
                 style={{ animationDelay: "590ms" }}
               >
                 <button
-                  className="enroll-btn w-full flex items-center justify-between rounded-[110px] px-[14px] py-[14px] pl-7 cursor-pointer border-0 outline-none"
-                  style={{ background: "#CFD4DC" }}
+                  className="enroll-btn w-full flex items-center justify-center cursor-pointer border-0 outline-none"
+                  style={{
+                    background: "#CFD4DC",
+                    borderRadius: "110.04px",
+                    paddingTop: "30.19px",
+                    paddingBottom: "30.19px",
+                    paddingLeft: "62.39px",
+                    paddingRight: "62.39px",
+                    gap: "1.12px",
+                  }}
                 >
-                  <span className="enroll-text text-[15px] font-semibold text-[#1a1916] tracking-[-0.2px]">
+                  <span
+                    className="enroll-text"
+                    style={{
+                      fontFamily: "'Plus Jakarta Sans', sans-serif",
+                      fontWeight: 600,
+                      fontSize: "32.2px",
+                      lineHeight: "100%",
+                      letterSpacing: "-0.322px",
+                      color: "#707F8C",
+                    }}
+                  >
                     Enroll now
                   </span>
-                  <div
-                    className="enroll-arrow w-[46px] h-[46px] rounded-full flex items-center justify-center text-white text-[20px] shrink-0"
-                    style={{ background: "linear-gradient(135deg, #2B7FFF, #6c5ce7)" }}
-                  >
-                    →
-                  </div>
                 </button>
               </div>
 

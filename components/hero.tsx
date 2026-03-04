@@ -52,7 +52,7 @@ export default function HeroSection() {
     href: string,
     isAnchor: boolean
   ) => {
-    if (!isAnchor) return; // let Next.js handle /Events page navigation
+    if (!isAnchor) return;
     if (!href.startsWith("#")) return;
     e.preventDefault();
     setMenuOpen(false);
@@ -112,10 +112,6 @@ export default function HeroSection() {
           0%   { opacity:0; clip-path:inset(0 100% 0 0); transform:translateY(10px); }
           20%  { opacity:1; }
           100% { opacity:1; clip-path:inset(0 0% 0 0);   transform:translateY(0); }
-        }
-        @keyframes lineGrow {
-          from { transform:scaleX(0); opacity:0; }
-          to   { transform:scaleX(1); opacity:1; }
         }
         @keyframes glowPulse {
           0%,100% { box-shadow:0 0 16px rgba(43,127,255,.38),0 0 0 0 rgba(43,127,255,0); }
@@ -185,14 +181,6 @@ export default function HeroSection() {
           color:#ffffff; margin:0; max-width:430px;
         }
 
-        .subtext-line {
-          display:block; height:1.5px; width:240px; margin-top:13px;
-          border-radius:99px;
-          background:linear-gradient(90deg,rgba(255,255,255,.55) 0%,rgba(43,127,255,.8) 55%,transparent 100%);
-          transform-origin:left center; transform:scaleX(0); opacity:0;
-        }
-        .loaded .subtext-line { animation:lineGrow 1s cubic-bezier(.22,1,.36,1) 1.85s forwards; }
-
         .cta-btn {
           display:inline-flex; align-items:center; justify-content:center;
           height:50px; border-radius:111px; padding:15px 31px; gap:10px;
@@ -221,7 +209,6 @@ export default function HeroSection() {
         @media (max-width:767px) {
           .future-pill { height:58px; font-size:56px; line-height:60px; padding:10px 18px; }
           .hero-subtext { font-size:16px; max-width:92%; line-height:1.45; }
-          .subtext-line { width:160px; }
           .orb-blue  { width:260px; height:260px; left:-30px; bottom:-40px; }
           .orb-white { width:160px; height:160px; }
         }
@@ -233,7 +220,7 @@ export default function HeroSection() {
         onMouseMove={handleMouseMove}
         className={`hero-card relative overflow-hidden flex flex-col ${loaded ? "loaded" : ""}`}
         style={{
-          margin      : "16px",
+          margin      : "6px",
           borderRadius: "18px",
           border      : "1px solid rgba(255,255,255,0.13)",
           minHeight   : "calc(100vh - 32px)",
@@ -267,7 +254,7 @@ export default function HeroSection() {
 
         {/* ── NAVBAR ── */}
         <nav
-          className="h-fade-nav relative flex items-center justify-between px-6 md:px-10 h-[72px] shrink-0"
+          className="h-fade-nav relative flex items-center justify-between px-8 md:px-14 lg:px-20 h-[72px] shrink-0"
           style={{ zIndex:20 }}
         >
           {/* Left links — desktop */}
@@ -435,7 +422,6 @@ export default function HeroSection() {
             <p className="hero-subtext">
               To know is to be free: This is the way of Nirvana.
             </p>
-            <span className="subtext-line" />
           </div>
 
           <div className="h-fade-4">

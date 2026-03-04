@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-
 import { useEffect, useRef } from "react";
 
 const JAKARTA = "var(--font-jakarta, 'Plus Jakarta Sans', sans-serif)";
@@ -21,20 +20,18 @@ const paragraphs = [
 const FLOATING_TICKER_ITEMS = Array(12).fill("NIRVANA ACADEMY");
 
 export default function About() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const textCardRef = useRef<HTMLDivElement>(null);
+  const sectionRef   = useRef<HTMLDivElement>(null);
+  const textCardRef  = useRef<HTMLDivElement>(null);
   const photoCardRef = useRef<HTMLDivElement>(null);
   const watermarkRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const parasRef = useRef<HTMLDivElement>(null);
+  const headingRef   = useRef<HTMLHeadingElement>(null);
+  const parasRef     = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-          }
+          if (entry.isIntersecting) entry.target.classList.add("in-view");
         });
       },
       { threshold: 0.12 }
@@ -51,7 +48,6 @@ export default function About() {
     return () => observer.disconnect();
   }, []);
 
-  // Parallax watermark on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (!watermarkRef.current || !sectionRef.current) return;
@@ -68,7 +64,6 @@ export default function About() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap');
 
-        /* ── Ticker animations ── */
         @keyframes scrollRight {
           0%   { transform: translateX(-50%); }
           100% { transform: translateX(0); }
@@ -78,8 +73,6 @@ export default function About() {
           50%  { transform: rotate(1.03deg) translateY(-5px); }
           100% { transform: rotate(1.03deg) translateY(0px); }
         }
-
-        /* ── Entrance keyframes ── */
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(48px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -101,7 +94,6 @@ export default function About() {
           to   { opacity: 1; }
         }
 
-        /* ── Scroll-reveal base state ── */
         .reveal-left  { opacity: 0; transform: translateX(-56px); transition: opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1); }
         .reveal-right { opacity: 0; transform: translateX(56px);  transition: opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1); }
         .reveal-up    { opacity: 0; transform: translateY(40px);   transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1); }
@@ -113,10 +105,8 @@ export default function About() {
           transform: translate(0, 0);
         }
 
-        /* Stagger the photo card slightly */
         .reveal-right { transition-delay: 0.15s; }
 
-        /* ── Paragraph stagger ── */
         .about-para {
           font-weight: 400;
           font-size: 13px;
@@ -132,7 +122,6 @@ export default function About() {
         .reveal-up.in-view .about-para { opacity: 1; transform: translateY(0); }
         ${Array.from({ length: 10 }, (_, i) => `.reveal-up.in-view .about-para:nth-child(${i + 1}) { transition-delay: ${0.05 * i}s; }`).join("\n")}
 
-        /* ── Stamp pop-in ── */
         .about-stamp {
           position: absolute;
           display: block;
@@ -150,7 +139,6 @@ export default function About() {
           transform: scale(1) rotate(0deg);
         }
 
-        /* ── Watermark entrance ── */
         .about-watermark {
           position: absolute;
           top: 160px;
@@ -168,7 +156,6 @@ export default function About() {
           animation: watermarkFade 1.4s ease 0.3s both;
         }
 
-        /* ── Heading ── */
         .about-h1 {
           font-weight: 600;
           font-size: 48px;
@@ -189,7 +176,6 @@ export default function About() {
           transition-delay: 0.2s;
         }
 
-        /* ── Ticker ── */
         .floating-ticker-outer {
           width: 110%; margin-left: -5%;
           background: #E0EDFF;
@@ -223,7 +209,6 @@ export default function About() {
           border-radius: 2px; flex-shrink: 0; opacity: 0.85;
         }
 
-        /* ── Layout ── */
         .about-wrapper {
           background-color: #ffffff;
           width: 100%; position: relative;
@@ -261,7 +246,6 @@ export default function About() {
           box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
         }
 
-        /* ── Responsive ── */
         @media (min-width: 1280px) {
           .about-card-row { padding: 0 48px 80px; gap: 20px; }
         }
@@ -334,12 +318,7 @@ export default function About() {
               <h1 className="about-h1" ref={headingRef} style={{ fontFamily: JAKARTA }}>
                 From The<br />Founder&apos;s Notes.
               </h1>
-              {/* Paragraphs stagger in when card is in view */}
-              <div
-                ref={parasRef}
-                className="reveal-up"
-                style={{ flex: 1 }}
-              >
+              <div ref={parasRef} className="reveal-up" style={{ flex: 1 }}>
                 {paragraphs.map((text, i) => (
                   <p key={i} className="about-para" style={{ fontFamily: JAKARTA }}>{text}</p>
                 ))}
@@ -349,7 +328,7 @@ export default function About() {
               </div>
             </div>
 
-            {/* Stamp pops in after card lands */}
+            {/* Stamp */}
             <div className="about-stamp">
               <Image
                 src="/stamp.png"
@@ -361,7 +340,7 @@ export default function About() {
             </div>
           </div>
 
-          {/* Photo card — slides in from right, 150ms later */}
+          {/* Photo card — slides in from right */}
           <div className="about-photo-card reveal-right" ref={photoCardRef}>
             <Image
               src="/about-image.png"
@@ -371,22 +350,70 @@ export default function About() {
               sizes="(max-width: 479px) 100vw, (max-width: 639px) 100vw, (max-width: 1023px) 680px, 539px"
               style={{ objectFit: "cover", objectPosition: "50% 15%" }}
             />
+            {/* Bottom gradient */}
             <div style={{
               position: "absolute", inset: 0,
               background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 55%)",
               pointerEvents: "none",
             }} />
-            <div style={{ position: "absolute", bottom: "20px", right: "20px", textAlign: "right", zIndex: 4 }}>
-              <p style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: "clamp(12px, 2.5vw, 16px)", lineHeight: "1.3", color: "#fff", textShadow: "0 1px 8px rgba(0,0,0,0.8)", margin: "0 0 3px", padding: 0 }}>
-                Xeus
-              </p>
-              <p style={{ fontFamily: JAKARTA, fontWeight: 400, fontSize: "clamp(10px, 1.8vw, 12px)", lineHeight: "1.4", letterSpacing: "0.01em", color: "rgba(255,255,255,0.88)", textShadow: "0 1px 6px rgba(0,0,0,0.7)", margin: 0, padding: 0 }}>
-                Founder, Nirvana Academy
-              </p>
-            </div>
+
+<div
+  className="xeus-badge"
+  style={{
+    backgroundImage     : `url("data:image/svg+xml,%3Csvg width='193' height='76' viewBox='0 0 193 76' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M193 64C193 70.6274 187.627 76 181 76H12C5.37258 76 0 70.6274 0 64V43.8291C0 37.2017 5.37258 31.8291 12 31.8291H31C37.6274 31.8291 43 26.4565 43 19.8291V12C43 5.37258 48.3726 0 55 0H141C147.627 0 153 5.37258 153 12V19.8291C153 26.4565 158.373 31.8291 165 31.8291H181C187.627 31.8291 193 37.2017 193 43.8291V64Z' fill='black' fill-opacity='0.25'/%3E%3C/svg%3E")`,
+    backgroundRepeat    : "no-repeat",
+    backgroundSize      : "100% 100%",
+    backdropFilter      : "blur(4px)",
+    WebkitBackdropFilter: "blur(4px)",
+    display             : "flex",
+    flexDirection       : "column",
+    alignItems          : "center",
+    justifyContent      : "flex-end",
+    paddingBottom       : "10px",
+    boxSizing           : "border-box",
+  }}
+>
+  <p
+    className="xeus-name"
+    style={{
+      fontFamily   : JAKARTA,
+      fontWeight   : 700,
+      fontSize     : "28px",
+      lineHeight   : "31.4px",
+      letterSpacing: "-0.04em",
+      color        : "#EEEEEE",
+      textTransform: "capitalize",
+      margin       : 0,
+      padding      : 0,
+      whiteSpace   : "nowrap",
+      textAlign    : "center",
+    }}
+  >
+    Xeus
+  </p>
+  <p
+    className="xeus-title"
+    style={{
+      fontFamily   : JAKARTA,
+      fontWeight   : 500,
+      fontSize     : "14px",
+      lineHeight   : "22.4px",
+      letterSpacing: "-0.04em",
+      color        : "rgba(238,238,238,0.70)",
+      textTransform: "capitalize",
+      margin       : 0,
+      padding      : 0,
+      whiteSpace   : "nowrap",
+      textAlign    : "center",
+    }}
+  >
+    Founder, Nirvana Academy
+  </p>
+</div>
           </div>
         </div>
-      </div>
+      </div>   {/* Frosted glass name badge */}
+          
 
       {/* Floating ticker */}
       <div style={{ width: "100%", overflow: "hidden", position: "relative", padding: "28px 0", backgroundColor: "#ffffff" }}>
