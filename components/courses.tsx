@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 const features = [
   {
     label: "12 Weeks\nIntensive",
@@ -44,21 +46,107 @@ const learnings = [
 ];
 
 export default function LatestCourse() {
+  const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        @keyframes shimmer {
+          0%   { background-position: -200% center; }
+          100% { background-position:  200% center; }
+        }
+
+        .enroll-btn {
+          width: 100%;
+          height: 174px;
+          border-radius: 110px;
+          background: #CFD4DC;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+          transition:
+            background 0.35s ease,
+            transform  0.25s cubic-bezier(.34,1.56,.64,1),
+            box-shadow 0.35s ease;
+        }
+
+        .enroll-btn::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(
+            110deg,
+            transparent 20%,
+            rgba(255,255,255,0.45) 50%,
+            transparent 80%
+          );
+          background-size: 200% 100%;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          animation: none;
+          pointer-events: none;
+        }
+
+        .enroll-btn:hover {
+          background: #B0B8C4;
+          transform: translateY(-4px) scale(1.015);
+          box-shadow:
+            0 12px 32px rgba(0,0,0,0.13),
+            0  4px 10px rgba(0,0,0,0.08);
+        }
+
+        .enroll-btn:hover::before {
+          opacity: 1;
+          animation: shimmer 1.4s linear infinite;
+        }
+
+        .enroll-btn:active {
+          transform: translateY(-1px) scale(0.995);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          transition-duration: 0.1s;
+        }
+
+        .enroll-label {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-weight: 600;
+          font-size: 32.2px;
+          line-height: 100%;
+          letter-spacing: -0.01em;
+          color: #707F8C;
+          position: relative;
+          z-index: 1;
+          transition:
+            color      0.3s ease,
+            transform  0.3s cubic-bezier(.34,1.56,.64,1),
+            letter-spacing 0.3s ease;
+        }
+
+        .enroll-btn:hover .enroll-label {
+          color: #4A5568;
+          transform: scale(1.04);
+          letter-spacing: 0.01em;
+        }
+
+        .enroll-btn:active .enroll-label {
+          transform: scale(0.98);
+          transition-duration: 0.1s;
+        }
       `}</style>
 
       <section
         className="w-full bg-white"
         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", padding: "72px 80px" }}
       >
-
         {/* ── Header ── */}
         <div className="flex flex-col items-center gap-4 mb-14">
-
-          {/* Badge */}
           <div
             style={{
               display: "inline-flex",
@@ -76,7 +164,6 @@ export default function LatestCourse() {
             </span>
           </div>
 
-          {/* Subtitle */}
           <p
             className="text-center m-0"
             style={{ fontWeight: 500, fontSize: "18px", lineHeight: "100%", letterSpacing: "-0.02em", color: "#666", maxWidth: "440px" }}
@@ -84,7 +171,6 @@ export default function LatestCourse() {
             Our battle-tested course turns novices into DeFi warriors. Learn the game, win the trades.
           </p>
 
-          {/* Koinophobia */}
           <h1
             className="m-0 text-center text-black capitalize"
             style={{
@@ -104,13 +190,12 @@ export default function LatestCourse() {
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            gap: "16px",
+            gap: "0px",
             alignItems: "start",
             maxWidth: "1200px",
             margin: "0 auto",
           }}
         >
-
           {/* ── LEFT: Dark card ── */}
           <div
             style={{
@@ -124,7 +209,6 @@ export default function LatestCourse() {
               overflow: "hidden",
             }}
           >
-            {/* Coming soon pill */}
             <div style={{ position: "absolute", top: "20px", right: "20px", zIndex: 10 }}>
               <span
                 style={{
@@ -144,10 +228,8 @@ export default function LatestCourse() {
               </span>
             </div>
 
-            {/* Course image area */}
             <div style={{ flex: 1 }} />
 
-            {/* Caption */}
             <div
               style={{
                 margin: "20px",
@@ -172,110 +254,119 @@ export default function LatestCourse() {
             </div>
           </div>
 
-          {/* ── RIGHT: Info column — no wrapper cards, floats on white bg ── */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "24px", paddingLeft: "28px" }}>
+          {/* ── RIGHT: Info column ── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
 
-            {/* 4 feature tiles — individual #F4F5F7 rounded cards with gaps */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
-              {features.map((f) => (
-                <div
-                  key={f.label}
-                  style={{
-                    background: "#F4F5F7",
-                    borderRadius: "14px",
-                    padding: "18px 16px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "12px",
-                  }}
-                >
-                  <span>{f.icon}</span>
-                  <span
-                    style={{
-                      fontWeight: 500,
-                      fontSize: "14px",
-                      lineHeight: "1.5",
-                      letterSpacing: "-0.2px",
-                      color: "#444",
-                      whiteSpace: "pre-line",
-                    }}
-                  >
-                    {f.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* What You'll Learn — raw on white, no card */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-              <h3
+            {/* Top card */}
+            <div
+              style={{
+                background: "#F4F5F7",
+                marginTop: "10px",
+                borderTopRightRadius: "20px",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "24px",
+              }}
+            >
+              <div
                 style={{
-                  margin: 0,
-                  fontWeight: 600,
-                  fontSize: "21px",
-                  lineHeight: "26.45px",
-                  letterSpacing: "-0.42px",
-                  color: "#111",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4, 1fr)",
+                  gap: "8px",
                 }}
               >
-                What You&apos;ll Learn
-              </h3>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "14px" }}>
-                {learnings.map((item) => (
-                  <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                    <svg
-                      width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                      style={{ marginTop: "3px", flexShrink: 0 }}
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
+                {features.map((f) => (
+                  <div
+                    key={f.label}
+                    style={{
+                      background: "#fff",
+                      borderRadius: "12px",
+                      padding: "16px 14px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    <span>{f.icon}</span>
                     <span
                       style={{
                         fontWeight: 500,
-                        fontSize: "16px",
-                        lineHeight: "22.67px",
-                        letterSpacing: "-0.3px",
-                        color: "#333",
+                        fontSize: "13.5px",
+                        lineHeight: "1.5",
+                        letterSpacing: "-0.2px",
+                        color: "#444",
+                        whiteSpace: "pre-line",
                       }}
                     >
-                      {item}
+                      {f.label}
                     </span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <h3
+                  style={{
+                    margin: 0,
+                    fontWeight: 600,
+                    fontSize: "21px",
+                    lineHeight: "26.45px",
+                    letterSpacing: "-0.42px",
+                    color: "#111",
+                  }}
+                >
+                  What You&apos;ll Learn
+                </h3>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "14px" }}>
+                  {learnings.map((item) => (
+                    <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                      <svg
+                        width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        style={{ marginTop: "3px", flexShrink: 0 }}
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span
+                        style={{
+                          fontWeight: 500,
+                          fontSize: "16px",
+                          lineHeight: "22.67px",
+                          letterSpacing: "-0.3px",
+                          color: "#333",
+                        }}
+                      >
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Enroll now — pill only, no outer container */}
-            <button
+            {/* ── Enroll now card ── */}
+            <div
               style={{
-                width: "100%",
-                height: "174px",
+                background: "#F4F5F7",
                 borderRadius: "110px",
-                background: "#CFD4DC",
-                border: "none",
-                cursor: "pointer",
+                marginLeft: "10px",
+                padding: "5px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                transition: "opacity 0.2s",
               }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "0.85")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.opacity = "1")}
             >
-              <span
-                style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  fontWeight: 600,
-                  fontSize: "32.2px",
-                  lineHeight: "100%",
-                  letterSpacing: "-0.01em",
-                  color: "#707F8C",
-                }}
+              <button
+                className="enroll-btn"
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => { setHovered(false); setPressed(false); }}
+                onMouseDown={() => setPressed(true)}
+                onMouseUp={() => setPressed(false)}
               >
-                Enroll now
-              </span>
-            </button>
+                <span className="enroll-label">Enroll now</span>
+              </button>
+            </div>
 
           </div>
         </div>
