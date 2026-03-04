@@ -32,14 +32,13 @@ const RocketIcon = () => (
   </svg>
 );
 
-/* ─── Static image row config ─── */
-// positions: far-left | near-left | CENTER | near-right | far-right
+/* ─── Image row: ALL SQUARES ─── */
 const IMAGE_ROW = [
-  { src: null, bg: "#E2E8F0", w: 80,  h: 96  },
-  { src: null, bg: "#CBD5E1", w: 96,  h: 112 },
-  { src: "/patnership.jpg", bg: "#F1F5F9", w: 136, h: 152 },  // center — tallest
-  { src: null, bg: "#CBD5E1", w: 96,  h: 112 },
-  { src: null, bg: "#E2E8F0", w: 80,  h: 96  },
+  { src: null,               bg: "#E2E8F0", size: 80  },
+  { src: null,               bg: "#CBD5E1", size: 96  },
+  { src: "/patnership.jpg",  bg: "#F1F5F9", size: 136 }, // center — largest square
+  { src: null,               bg: "#CBD5E1", size: 96  },
+  { src: null,               bg: "#E2E8F0", size: 80  },
 ];
 
 export default function PartnershipSection() {
@@ -116,6 +115,12 @@ export default function PartnershipSection() {
 
         .lets-talk-btn { transition: background 0.2s, transform 0.15s; }
         .lets-talk-btn:hover { background: #d4e4fc !important; transform: scale(1.03); }
+
+        /* image tile hover */
+        .img-tile {
+          transition: transform 0.22s cubic-bezier(.34,1.56,.64,1), box-shadow 0.22s ease;
+        }
+        .img-tile:hover { transform: translateY(-4px) scale(1.04); }
       `}</style>
 
       <div className={`w-full flex flex-col items-center ${entered ? "entered" : ""}`}>
@@ -130,9 +135,9 @@ export default function PartnershipSection() {
           </span>
         </div>
 
-        {/* ── Static Image Row ── */}
+        {/* ── Square Image Row ── */}
         <div
-          className="ps-enter-images flex items-end justify-center mb-10"
+          className="ps-enter-images flex items-center justify-center mb-10"
           style={{ gap: "10px" }}
         >
           {IMAGE_ROW.map((img, i) => {
@@ -140,9 +145,10 @@ export default function PartnershipSection() {
             return (
               <div
                 key={i}
+                className="img-tile"
                 style={{
-                  width:        img.w,
-                  height:       img.h,
+                  width:        img.size,
+                  height:       img.size,   /* ← square: h === w */
                   borderRadius: isCenter ? 18 : 12,
                   overflow:     "hidden",
                   background:   img.bg,

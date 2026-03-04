@@ -1,46 +1,44 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
 
-const leftLinks = [
-  { label: "Home",     href: "#hero-section", isAnchor: true  },
-  { label: "Articles", href: "#articles",      isAnchor: true  },
-];
-
-const rightLinks = [
-  { label: "Events",   href: "/Events",        isAnchor: false },
-  { label: "Team",     href: "#team",           isAnchor: true  },
-];
-
-// "Course" sits between logo on mobile menu, and we add it to desktop left side
-const allLinks = [
-  { label: "Home",     href: "#hero-section", isAnchor: true  },
-  { label: "Articles", href: "#articles",      isAnchor: true  },
-  { label: "Course",   href: "#courses",       isAnchor: true  },
-  { label: "Events",   href: "/Events",        isAnchor: false },
-  { label: "Team",     href: "#team",           isAnchor: true  },
-];
-
 const desktopLeft = [
-  { label: "Home",     href: "#hero-section", isAnchor: true  },
-  { label: "Articles", href: "#articles",      isAnchor: true  },
-  { label: "Course",   href: "#courses",       isAnchor: true  },
+  { label: "Home",     href: "/",        isAnchor: false },
+  { label: "Articles", href: "/#articles", isAnchor: false },
+  { label: "Course",   href: "/#courses",  isAnchor: false },
 ];
 
 const desktopRight = [
-  { label: "Events",   href: "/Events",        isAnchor: false },
-  { label: "Team",     href: "#team",           isAnchor: true  },
+  { label: "Events",   href: "/Events",   isAnchor: false },
+  { label: "Team",     href: "/#team",    isAnchor: false },
+];
+
+const allLinks = [
+  { label: "Home",     href: "/",         isAnchor: false },
+  { label: "Articles", href: "/#articles", isAnchor: false },
+  { label: "Course",   href: "/#courses",  isAnchor: false },
+  { label: "Events",   href: "/Events",    isAnchor: false },
+  { label: "Team",     href: "/#team",     isAnchor: false },
 ];
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [visible,  setVisible]  = useState(false);
+  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [visible,   setVisible]   = useState(false);
+  const [hasHero,   setHasHero]   = useState(true); // assume hero until confirmed otherwise
 
   useEffect(() => {
     const hero = document.getElementById("hero-section");
-    if (!hero) return;
+
+    if (!hero) {
+      // No hero on this page (e.g. Events) → show immediately, use light theme
+      setHasHero(false);
+      setVisible(true);
+      return;
+    }
+
+    // Hero exists → show only after hero scrolls out
+    setHasHero(true);
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(!entry.isIntersecting),
       { threshold: 0 }
@@ -59,13 +57,30 @@ export default function Navbar() {
     href: string,
     isAnchor: boolean
   ) => {
-    if (!isAnchor) return; // let Next.js handle page navigation
+    if (!isAnchor) return;
     if (!href.startsWith("#")) return;
     e.preventDefault();
     setMenuOpen(false);
     const el = document.getElementById(href.slice(1));
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  // ── Theme tokens ─────────────────────────────────────
+  const isDark = hasHero; // dark theme on hero pages, light on others
+
+  const navBg        = isDark ? "rgba(15,16,17,0.92)"          : "#ffffff";
+  const navBorder    = isDark ? "rgba(255,255,255,0.12)"        : "transparent";
+  const navBorderBottom = isDark ? undefined : "";
+  const linkColor    = isDark ? "rgba(255,255,255,0.82)"        : "rgba(20,20,20,0.80)";
+  const underlineClr = isDark ? "#fff"                          : "#111";
+  const logoSrc      = isDark ? "/logo.svg"                     : "/logob.svg";
+  const lineClr      = isDark ? "rgba(255,255,255,0.88)"        : "rgba(20,20,20,0.70)";
+  const btnBorderClr = isDark ? "rgba(255,255,255,0.13)"        : "rgba(0,0,0,0.12)";
+  const btnBg        = isDark ? "rgba(255,255,255,0.04)"        : "rgba(0,0,0,0.03)";
+  const btnHoverBg   = isDark ? "rgba(255,255,255,0.09)"        : "rgba(0,0,0,0.07)";
+  const btnHoverBdr  = isDark ? "rgba(255,255,255,0.26)"        : "rgba(0,0,0,0.20)";
+  const btnOpenBg    = isDark ? "rgba(255,255,255,0.07)"        : "rgba(0,0,0,0.05)";
+  const btnOpenBdr   = isDark ? "rgba(255,255,255,0.20)"        : "rgba(0,0,0,0.16)";
 
   const navFont: React.CSSProperties = {
     fontFamily   : "'Plus Jakarta Sans', sans-serif",
@@ -75,7 +90,7 @@ export default function Navbar() {
     letterSpacing: "-0.02em",
   };
 
-  const btnStyle: React.CSSProperties = {
+  const joinBtnStyle: React.CSSProperties = {
     height        : 50,
     borderRadius  : 61,
     gap           : 10,
@@ -93,6 +108,7 @@ export default function Navbar() {
     fontWeight    : 600,
     transition    : "background .2s ease, transform .15s ease",
     boxShadow     : "0 0 22px rgba(43,127,255,.4)",
+    textDecoration: "none",
   };
 
   return (
@@ -100,92 +116,152 @@ export default function Navbar() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-        .nav-lnk { position: relative; }
-        .nav-lnk::after {
-          content: ''; position: absolute;
-          bottom: -3px; left: 0;
-          width: 0; height: 1.5px;
-          background: #fff; border-radius: 99px;
-          transition: width .22s ease;
-        }
-        .nav-lnk:hover::after { width: 100%; }
-
         @keyframes navDown {
           from { opacity: 0; transform: translateY(-18px); }
           to   { opacity: 1; transform: translateY(0); }
         }
         .nav-enter { animation: navDown .32s cubic-bezier(.22,1,.36,1) forwards; }
 
-        @keyframes mobDown {
-          from { opacity: 0; transform: translateY(-8px); }
-          to   { opacity: 1; transform: translateY(0); }
+        /* ── Nav links ── */
+        .nav-lnk { position: relative; text-decoration: none; }
+        .nav-lnk::after {
+          content: ''; position: absolute; bottom: -3px; left: 0;
+          width: 0; height: 1.5px; border-radius: 99px;
+          background: var(--underline-clr, #fff);
+          transition: width .22s ease;
         }
-        .mob-menu { animation: mobDown .22s cubic-bezier(.22,1,.36,1) forwards; }
+        .nav-lnk:hover::after { width: 100%; }
 
-        .mob-lnk {
-          display: flex; align-items: center; justify-content: space-between;
-          transition: color .16s ease, padding-left .16s ease;
+        /* ── Hamburger: mobile only ── */
+        .burger-wrap { display: flex; margin-left: auto; }
+        @media (min-width: 768px) { .burger-wrap { display: none; } }
+
+        .burger-btn {
+          width: 44px; height: 44px; border-radius: 12px;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; flex-shrink: 0; outline: none;
+          -webkit-tap-highlight-color: transparent;
+          border: 1.5px solid var(--btn-border, rgba(255,255,255,0.13));
+          background: var(--btn-bg, rgba(255,255,255,0.04));
+          transition: background .22s ease, border-color .22s ease,
+                      box-shadow .22s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
         }
-        .mob-lnk:hover { color: #fff !important; padding-left: 5px; }
-        .mob-arrow { opacity: 0; transform: translateX(-4px); transition: opacity .16s, transform .16s; }
-        .mob-lnk:hover .mob-arrow { opacity: 1; transform: translateX(0); }
+        .burger-btn:hover {
+          background: var(--btn-hover-bg, rgba(255,255,255,0.09));
+          border-color: var(--btn-hover-bdr, rgba(255,255,255,0.26));
+          box-shadow: 0 0 0 4px rgba(128,128,128,0.08);
+          transform: scale(1.07);
+        }
+        .burger-btn:active { transform: scale(0.93); transition-duration: .1s; }
+
+        .burger-lines { display: flex; flex-direction: column; align-items: flex-end; gap: 5.5px; width: 20px; }
+        .b-line {
+          display: block; height: 1.5px; border-radius: 99px;
+          background: var(--line-clr, rgba(255,255,255,0.88));
+          transform-origin: center;
+          transition: width .3s cubic-bezier(.22,1,.36,1),
+                      transform .3s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+        }
+        .b-line-1 { width: 20px; }
+        .b-line-2 { width: 13px; }
+        .b-line-3 { width: 20px; }
+        .burger-btn:hover .b-line-2 { width: 20px; }
+        .burger-btn.is-open .b-line-1 { transform: translateY(7px) rotate(45deg); }
+        .burger-btn.is-open .b-line-2 { width: 0; opacity: 0; }
+        .burger-btn.is-open .b-line-3 { transform: translateY(-7px) rotate(-45deg); }
+        .burger-btn.is-open {
+          background: var(--btn-open-bg, rgba(255,255,255,0.07));
+          border-color: var(--btn-open-bdr, rgba(255,255,255,0.20));
+        }
+
+        /* ── Mobile overlay ── */
+        @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes linkIn    { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes footerIn  { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
+
+        .mob-overlay {
+          position: fixed; inset: 0; background: #000; z-index: 200;
+          display: flex; flex-direction: column;
+          animation: overlayIn .2s ease forwards;
+        }
+        .mob-link {
+          font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400;
+          font-size: 46px; line-height: 1; letter-spacing: -0.03em;
+          color: rgba(255,255,255,0.7); text-align: right;
+          text-decoration: none; opacity: 0; display: block;
+          transition: color .18s ease, letter-spacing .18s ease,
+                      transform .22s cubic-bezier(.22,1,.36,1);
+        }
+        .mob-link:hover { color: #fff; letter-spacing: -0.01em; transform: translateX(-5px); }
+        .mob-link:nth-child(1) { animation: linkIn .36s cubic-bezier(.22,1,.36,1) .07s forwards; }
+        .mob-link:nth-child(2) { animation: linkIn .36s cubic-bezier(.22,1,.36,1) .13s forwards; }
+        .mob-link:nth-child(3) { animation: linkIn .36s cubic-bezier(.22,1,.36,1) .19s forwards; }
+        .mob-link:nth-child(4) { animation: linkIn .36s cubic-bezier(.22,1,.36,1) .25s forwards; }
+        .mob-link:nth-child(5) { animation: linkIn .36s cubic-bezier(.22,1,.36,1) .31s forwards; }
+        .mob-footer { opacity: 0; animation: footerIn .4s ease .44s forwards; }
 
         .join-btn:hover  { background: #1a6ee0 !important; transform: scale(1.03); }
         .join-btn:active { transform: scale(.97); }
       `}</style>
 
+      {/* ── Navbar ── */}
       <div
         style={{
           position     : "fixed",
-          top          : 0, left: 0, right: 0,
+          top: 0, left: 0, right: 0,
           zIndex       : 50,
           padding      : "10px 10px 0",
           opacity      : visible ? 1 : 0,
           pointerEvents: visible ? "auto" : "none",
           transition   : "opacity .3s ease",
           fontFamily   : "'Plus Jakarta Sans', sans-serif",
+          // CSS custom properties for theme tokens
+          ["--underline-clr" as any]: underlineClr,
+          ["--line-clr"      as any]: lineClr,
+          ["--btn-border"    as any]: btnBorderClr,
+          ["--btn-bg"        as any]: btnBg,
+          ["--btn-hover-bg"  as any]: btnHoverBg,
+          ["--btn-hover-bdr" as any]: btnHoverBdr,
+          ["--btn-open-bg"   as any]: btnOpenBg,
+          ["--btn-open-bdr"  as any]: btnOpenBdr,
         }}
       >
         <div
           key={String(visible)}
           className={visible ? "nav-enter" : ""}
           style={{
-            background          : "rgba(15,16,17,0.92)",
+            background          : navBg,
             backdropFilter      : "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            borderRadius        : menuOpen ? "14px 14px 0 0" : "14px",
-            border              : "1px solid rgba(255,255,255,0.12)",
-            borderBottom        : menuOpen ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(255,255,255,0.12)",
-            transition          : "border-radius .22s ease",
+            borderRadius        : "14px",
+            border              : `1px solid ${navBorder}`,
+            borderBottom        : navBorderBottom,
+            boxShadow           : isDark ? "none" : "0 1px 0 rgba(0,0,0,0.06)",
           }}
         >
-          {/* NAV BAR */}
           <nav className="h-[64px] flex items-center justify-between px-5 md:px-8 relative">
 
             {/* LEFT — desktop */}
             <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
               {desktopLeft.map(({ label, href, isAnchor }) => (
                 <li key={label}>
-                  <a
-                    href={href}
-                    className="nav-lnk"
-                    style={{ ...navFont, color: "rgba(255,255,255,.82)" }}
-                    onClick={(e) => handleAnchorClick(e, href, isAnchor)}
-                  >
+                  <a href={href} className="nav-lnk"
+                    style={{ ...navFont, color: linkColor }}
+                    onClick={(e) => handleAnchorClick(e, href, isAnchor)}>
                     {label}
                   </a>
                 </li>
               ))}
             </ul>
 
-            {/* CENTER LOGO */}
+            {/* CENTER LOGO — dark page uses logo.svg, light page uses logob.svg */}
             <a
-              href="#hero-section"
+              href="/"
               className="flex items-center gap-[10px] md:absolute md:left-1/2 md:-translate-x-1/2"
-              onClick={(e) => handleAnchorClick(e, "#hero-section", true)}
+              style={{ textDecoration: "none" }}
             >
               <Image
-                src="/logo.svg"
+                src={logoSrc}
                 alt="Nirvana Academy"
                 width={149}
                 height={50}
@@ -197,103 +273,64 @@ export default function Navbar() {
             {/* RIGHT — desktop */}
             <div className="hidden md:flex items-center gap-8">
               {desktopRight.map(({ label, href, isAnchor }) => (
-                <a
-                  key={label}
-                  href={href}
-                  className="nav-lnk"
-                  style={{ ...navFont, color: "rgba(255,255,255,.82)" }}
-                  onClick={(e) => handleAnchorClick(e, href, isAnchor)}
-                >
+                <a key={label} href={href} className="nav-lnk"
+                  style={{ ...navFont, color: linkColor }}
+                  onClick={(e) => handleAnchorClick(e, href, isAnchor)}>
                   {label}
                 </a>
               ))}
-              <a
-                href="#contact"
-                className="join-btn"
-                style={btnStyle}
-                onClick={(e) => handleAnchorClick(e, "#contact", true)}
-              >
+              <a href="/#contact" className="join-btn" style={joinBtnStyle}>
                 Join Nirvana
               </a>
             </div>
 
-            {/* HAMBURGER — mobile */}
-            <button
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              onClick={() => setMenuOpen(v => !v)}
-              className="md:hidden ml-auto flex flex-col justify-center items-center w-9 h-9 gap-[5px]"
-              style={{
-                borderRadius: 9,
-                background  : menuOpen ? "rgba(255,255,255,.08)" : "transparent",
-                transition  : "background .2s",
-                flexShrink  : 0,
-              }}
-            >
-              <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen ? "w-5 rotate-45 translate-y-[6.5px]" : "w-5"}`} style={{ borderRadius: 2 }} />
-              <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen ? "w-0 opacity-0" : "w-[13px]"}`} style={{ borderRadius: 2 }} />
-              <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen ? "w-5 -rotate-45 -translate-y-[6.5px]" : "w-5"}`} style={{ borderRadius: 2 }} />
-            </button>
-          </nav>
-
-          {/* MOBILE DROPDOWN */}
-          {menuOpen && (
-            <div
-              className="mob-menu md:hidden"
-              style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}
-            >
-              <div className="grid grid-cols-2 gap-[6px] p-3">
-                {allLinks.map(({ label, href, isAnchor }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    onClick={(e) => handleAnchorClick(e, href, isAnchor)}
-                    className="mob-lnk"
-                    style={{
-                      ...navFont,
-                      color       : "rgba(255,255,255,.70)",
-                      padding     : "13px 14px",
-                      borderRadius: 10,
-                      background  : "rgba(255,255,255,.04)",
-                      border      : "1px solid rgba(255,255,255,.06)",
-                    }}
-                  >
-                    {label}
-                    <svg className="mob-arrow w-4 h-4" fill="none" viewBox="0 0 16 16"
-                      style={{ color: "rgba(255,255,255,.38)" }}>
-                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                ))}
-              </div>
-
-              <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "0 12px" }} />
-
-              <div className="p-3">
-                <a
-                  href="#contact"
-                  onClick={(e) => handleAnchorClick(e, "#contact", true)}
-                  className="join-btn flex items-center justify-center gap-2 w-full"
-                  style={{
-                    ...btnStyle,
-                    width        : "100%",
-                    height       : 50,
-                    borderRadius : 12,
-                    background   : "#2B7FFF",
-                    boxShadow    : "0 4px 22px rgba(43,127,255,.38)",
-                    paddingTop   : 15,
-                    paddingBottom: 15,
-                  }}
-                >
-                  Join Nirvana
-                  <svg width="15" height="15" fill="none" viewBox="0 0 16 16">
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-              </div>
+            {/* HAMBURGER — CSS hides at ≥768px */}
+            <div className="burger-wrap">
+              <button
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                onClick={() => setMenuOpen(v => !v)}
+                className={`burger-btn ${menuOpen ? "is-open" : ""}`}
+              >
+                <span className="burger-lines">
+                  <span className="b-line b-line-1" />
+                  <span className="b-line b-line-2" />
+                  <span className="b-line b-line-3" />
+                </span>
+              </button>
             </div>
-          )}
+          </nav>
         </div>
       </div>
+
+      {/* ── Fullscreen mobile overlay (always dark) ── */}
+      {menuOpen && (
+        <div className="mob-overlay">
+          <div style={{ display: "flex", justifyContent: "flex-end", padding: "14px 20px" }}>
+            <button aria-label="Close menu" onClick={() => setMenuOpen(false)}
+              className="burger-btn is-open"
+              style={{ ["--btn-border" as any]: "rgba(255,255,255,0.13)", ["--btn-bg" as any]: "rgba(255,255,255,0.04)", ["--btn-open-bg" as any]: "rgba(255,255,255,0.07)", ["--btn-open-bdr" as any]: "rgba(255,255,255,0.20)", ["--btn-hover-bg" as any]: "rgba(255,255,255,0.09)", ["--btn-hover-bdr" as any]: "rgba(255,255,255,0.26)", ["--line-clr" as any]: "rgba(255,255,255,0.88)" }}>
+              <span className="burger-lines">
+                <span className="b-line b-line-1" />
+                <span className="b-line b-line-2" />
+                <span className="b-line b-line-3" />
+              </span>
+            </button>
+          </div>
+          <nav style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", padding: "0 36px", gap: "38px" }}>
+            {allLinks.map(({ label, href, isAnchor }) => (
+              <a key={label} href={href} className="mob-link"
+                onClick={(e) => handleAnchorClick(e, href, isAnchor)}>
+                {label}
+              </a>
+            ))}
+          </nav>
+          <div className="mob-footer" style={{ padding: "24px 36px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            <p style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 400, fontSize: "11px", letterSpacing: "0.06em", color: "rgba(255,255,255,0.28)", margin: 0, textTransform: "uppercase" }}>
+              © 2025 – COPYRIGHT NIRVANA | PRIVACY
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
