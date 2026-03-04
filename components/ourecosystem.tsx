@@ -344,7 +344,7 @@ const Ecosystem = () => {
                                 </div>
                             </div>
                             <div className="absolute bottom-0 left-0 w-full h-[184px] pointer-events-none">
-                                <Image src="/vector.png" fill className="object-cover object-bottom" alt="Wave decoration" />
+                                <Image src="/Vector.png" fill className="object-cover object-bottom" alt="Wave decoration" />
                             </div>
                             <div className="card-accent bg-gradient-to-r from-purple-400 to-transparent" />
                         </div>
