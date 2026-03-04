@@ -355,8 +355,8 @@ const Ecosystem = () => {
                             style={{ borderRadius: "11.32px", animationDelay: "240ms" }}
                         >
                             <div className="mt-auto">
-                                <p className="text-xl font-semibold mb-1 text-black" style={{ fontFamily: JAKARTA }}>Nirvana Labs</p>
-                                <p className="text-sm text-black mb-3" style={{ fontFamily: JAKARTA }}>
+                                <p className="text-[24px] md:text-[28px] tracking-tight font-semibold mb-2 text-black" style={{ fontFamily: JAKARTA }}>Nirvana Labs</p>
+                                <p className="text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed text-[rgba(3,3,3,0.6)] mb-5 max-w-[85%] md:max-w-[75%]" style={{ fontFamily: JAKARTA }}> 
                                     Our innovation hub where cutting-edge Web3 research meets practical application.
                                 </p>
                                 <a href="#" className="explore-link text-sm font-semibold text-black flex items-center gap-1" style={{ fontFamily: JAKARTA }}>
@@ -378,7 +378,7 @@ const Ecosystem = () => {
                         >
                             <div className="mt-auto relative z-10">
                                 <p className="text-[24px] md:text-[28px] tracking-tight font-semibold mb-2 text-black" style={{ fontFamily: JAKARTA }}>DAO Governance</p>
-                                <p className="text-[14px] md:text-[15px] leading-relaxed text-gray-700 mb-5 max-w-[85%] md:max-w-[75%]" style={{ fontFamily: JAKARTA }}>
+                                <p className="text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed text-[rgba(3,3,3,0.6)]  mb-5 max-w-[85%] md:max-w-[75%]" style={{ fontFamily: JAKARTA }}>
                                     Community-driven decision making. Shape the future of Web3 education together.
                                 </p>
                                 <a href="#" className="explore-link text-sm font-semibold text-black flex items-center gap-1" style={{ fontFamily: JAKARTA }}>
@@ -386,7 +386,7 @@ const Ecosystem = () => {
                                 </a>
                             </div>
                             <div className="absolute bottom-6 md:bottom-8 right-6 md:right-8 w-[100px] md:w-[139px] flex">
-                                <Image src="/Frame 51.png" width={139} height={46} className="h-auto w-full object-contain" alt="Avatars" />
+                                <Image src="/Frame 51 (1).png" width={139} height={46} className="h-auto w-full object-contain" alt="Avatars" />
                             </div>
                             <div className="card-accent bg-gradient-to-r from-orange-400 to-transparent" />
                         </div>
@@ -405,12 +405,12 @@ const Ecosystem = () => {
                             style={{ borderRadius: "11.32px", animationDelay: "280ms" }}
                         >
                             <div className="mt-auto">
-                                <span className="inline-flex items-center bg-[#e2e2e2] text-gray-700 text-xs px-3 py-1 rounded-full mb-4 font-medium" style={{ fontFamily: JAKARTA }}>
+                                <span className="inline-flex items-center bg-[rgba(43,127,255,0.2)] border border-[rgba(43,127,255,0.5)] text-gray-700 text-xs px-3 py-1 rounded-full mb-4 font-medium" style={{ fontFamily: JAKARTA }}>
                                     <span className="pulse-dot" />
                                     Coming Soon
                                 </span>
                                 <p className="text-[24px] md:text-[28px] tracking-tight font-semibold mb-2 text-black" style={{ fontFamily: JAKARTA }}>Community Hub</p>
-                                <p className="text-[14px] md:text-[15px] leading-relaxed text-gray-700" style={{ fontFamily: JAKARTA }}>
+                                <p className="text-[14px] sm:text-[15px] md:text-[16px] leading-relaxed text-[rgba(3,3,3,0.6)]" style={{ fontFamily: JAKARTA }}>
                                     Connect, collaborate, and grow with fellow Web3 enthusiasts worldwide.
                                 </p>
                             </div>
