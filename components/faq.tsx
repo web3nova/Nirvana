@@ -55,18 +55,9 @@ export default function Faq() {
                     from { opacity: 0; transform: translateY(28px); }
                     to   { opacity: 1; transform: translateY(0); }
                 }
-                @keyframes faq-lineGrow {
-                    from { transform: scaleX(0); transform-origin: left; }
-                    to   { transform: scaleX(1); transform-origin: left; }
-                }
-                @keyframes faq-answerLine {
-                    from { transform: scaleX(0); transform-origin: left; }
-                    to   { transform: scaleX(1); transform-origin: left; }
-                }
 
                 .faq-heading-enter { animation: faq-slideLeft 0.7s cubic-bezier(0.22,1,0.36,1) both; }
                 .faq-sub-enter     { animation: faq-slideLeft 0.7s 0.12s cubic-bezier(0.22,1,0.36,1) both; }
-                .faq-bar-enter     { animation: faq-lineGrow  0.6s 0.28s cubic-bezier(0.22,1,0.36,1) both; }
                 .faq-item-enter    { animation: faq-fadeUp    0.55s cubic-bezier(0.22,1,0.36,1) both; }
 
                 .faq-row {
@@ -111,14 +102,7 @@ export default function Faq() {
                     color: #2B7FFF;
                 }
 
-                .faq-answer-accent {
-                    display: block;
-                    height: 2px;
-                    border-radius: 2px;
-                    background: linear-gradient(90deg, #2B7FFF 0%, rgba(43,127,255,0) 100%);
-                    margin-bottom: 12px;
-                    animation: faq-answerLine 0.4s cubic-bezier(0.22,1,0.36,1) both;
-                }
+
             `}</style>
 
             <section className="py-16 md:py-24 bg-white w-full">
@@ -133,10 +117,6 @@ export default function Faq() {
                             <p className={`text-[15px] text-gray-500 max-w-sm leading-relaxed ${header.vis ? "faq-sub-enter" : "opacity-0"}`}>
                                 Got questions? We've got answers to kickstart your Web3 journey with Nirvana.
                             </p>
-
-                            {header.vis && (
-                                <div className="faq-bar-enter mt-8 hidden md:block h-[3px] w-14 rounded-full bg-[#2B7FFF]" />
-                            )}
                         </div>
 
                         {/* ── Right: accordion ── */}
@@ -170,7 +150,6 @@ export default function Faq() {
                                         </button>
 
                                         <div className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-96 pb-6 opacity-100" : "max-h-0 opacity-0"}`}>
-                                            {isOpen && <span className="faq-answer-accent" />}
                                             <p className="text-[14px] text-gray-600 leading-relaxed">
                                                 {faq.answer}
                                             </p>

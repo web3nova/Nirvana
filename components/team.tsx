@@ -1,7 +1,14 @@
 "use client";
 
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+
+const jakarta = Plus_Jakarta_Sans({
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
+});
+const JAKARTA = jakarta.style.fontFamily;
 
 const teamMembers = [
     {
@@ -89,7 +96,6 @@ const SocialIcon = ({ name, url }: { name: string; url: string }) => (
     </a>
 );
 
-/* Single card — observes itself and fires its own entrance */
 function TeamCard({ member, index }: { member: typeof teamMembers[0]; index: number }) {
     const ref  = useRef<HTMLDivElement>(null);
     const [vis, setVis] = useState(false);
@@ -110,6 +116,7 @@ function TeamCard({ member, index }: { member: typeof teamMembers[0]; index: num
             ref={ref}
             className="team-card flex flex-col bg-[#F7F8F9] rounded-2xl p-4 group"
             style={{
+                fontFamily: JAKARTA,
                 opacity: vis ? 1 : 0,
                 transform: vis ? 'translateY(0) scale(1)' : 'translateY(36px) scale(0.96)',
                 transition: `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 80}ms,
@@ -125,24 +132,44 @@ function TeamCard({ member, index }: { member: typeof teamMembers[0]; index: num
                     height={300}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                {/* shimmer overlay on hover */}
                 <div className="card-shimmer absolute inset-0 pointer-events-none rounded-xl" />
             </div>
 
             <div className="flex flex-col flex-grow">
-                <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <h3 className="text-[17px] font-medium text-gray-900 transition-colors duration-300 group-hover:text-blue-600">
-                        {member.name}
-                    </h3>
-                    <span className={`role-badge text-[10px] font-medium px-2 py-0.5 rounded-full border ${member.roleColor} ${member.roleBorder}`}>
-                        {member.role}
-                    </span>
-                </div>
+                {/* Name */}
+                <h3
+                    className="text-gray-900 transition-colors duration-300 group-hover:text-blue-600 mb-1"
+                    style={{
+                        fontWeight: 500,
+                        fontSize: "21px",
+                        lineHeight: "32px",
+                        letterSpacing: "-1px",
+                    }}
+                >
+                    {member.name}
+                </h3>
 
-                <p className="text-[13px] text-gray-500 leading-snug mb-4 flex-grow">
+                {/* Role badge */}
+                <span className={`role-badge self-start text-[10px] font-medium px-2 py-0.5 rounded-full border mb-2 ${member.roleColor} ${member.roleBorder}`}
+                    style={{ fontFamily: JAKARTA }}
+                >
+                    {member.role}
+                </span>
+
+                {/* Bio */}
+                <p
+                    className="text-gray-500 mb-4 flex-grow"
+                    style={{
+                        fontWeight: 400,
+                        fontSize: "14px",
+                        lineHeight: "20px",
+                        letterSpacing: "-0.15px",
+                    }}
+                >
                     {member.bio}
                 </p>
 
+                {/* Socials */}
                 <div className="flex items-center gap-1.5 mt-auto">
                     {member.socials.map((social, idx) => (
                         <SocialIcon key={idx} name={social.name} url={social.url} />
@@ -184,7 +211,6 @@ export default function Team() {
                     transform: translateY(-8px) !important;
                     box-shadow: 0 20px 40px rgba(0,0,0,0.09);
                 }
-                /* shimmer on image hover */
                 .card-shimmer {
                     background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.45) 50%, transparent 60%);
                     background-size: 200% 100%;
@@ -193,7 +219,6 @@ export default function Team() {
                 .group:hover .card-shimmer {
                     animation: shimmerSlide 0.75s ease forwards;
                 }
-                /* role badge pop on card hover */
                 .role-badge {
                     transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
                 }
@@ -201,7 +226,6 @@ export default function Team() {
                     transform: scale(1.08);
                     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
                 }
-                /* social icon bounce on hover */
                 .social-icon-wrap a {
                     transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), background 0.2s ease;
                 }
@@ -211,7 +235,7 @@ export default function Team() {
                 }
             `}</style>
 
-            <section className="py-16 bg-white w-full">
+            <section className="py-16 bg-white w-full" style={{ fontFamily: JAKARTA }}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Header */}
@@ -224,18 +248,33 @@ export default function Team() {
                             transition: 'opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1)',
                         }}
                     >
-                        <h2 className="text-4xl font-medium text-gray-900 mb-3 tracking-tight">
+                        <h2
+                            className="text-gray-900 mb-3"
+                            style={{
+                                fontFamily: JAKARTA,
+                                fontWeight: 500,
+                                fontSize: "48px",
+                                lineHeight: "47.2px",
+                                letterSpacing: "-0.05em",
+                            }}
+                        >
                             Meet the Team
                         </h2>
                         <p
-                            className="max-w-xl mx-auto text-[15px] text-gray-500 leading-relaxed"
+                            className="max-w-xl mx-auto text-gray-500"
                             style={{
+                                fontFamily: JAKARTA,
+                                fontWeight: 500,
+                                fontSize: "18px",
+                                lineHeight: "100%",
+                                letterSpacing: "-0.02em",
                                 opacity: headerVis ? 1 : 0,
                                 transform: headerVis ? 'translateY(0)' : 'translateY(16px)',
                                 transition: 'opacity 0.65s cubic-bezier(0.22,1,0.36,1) 120ms, transform 0.65s cubic-bezier(0.22,1,0.36,1) 120ms',
                             }}
                         >
-                            Meet the crew driving Nirvana—mentors, traders, and Web3<br className="hidden sm:block" />
+                            Meet the crew driving Nirvana—mentors, traders, and Web3{" "}
+                            <br className="hidden sm:block" />
                             pioneers who live for the grind.
                         </p>
                     </div>
