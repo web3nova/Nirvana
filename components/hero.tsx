@@ -8,12 +8,10 @@ const desktopLeft = [
   { label: "Articles", href: "#articles",      isAnchor: true  },
   { label: "Course",   href: "#courses",       isAnchor: true  },
 ];
-
 const desktopRight = [
   { label: "Events",   href: "/Events",        isAnchor: false },
   { label: "Team",     href: "#team",           isAnchor: true  },
 ];
-
 const allLinks = [
   { label: "Home",     href: "#hero-section", isAnchor: true  },
   { label: "Articles", href: "#articles",      isAnchor: true  },
@@ -88,6 +86,7 @@ export default function HeroSection() {
     letterSpacing : "-0.02em",
     boxShadow     : "0 0 22px rgba(43,127,255,.4)",
     transition    : "background .2s ease, transform .15s ease",
+    textDecoration: "none",
   };
 
   return (
@@ -97,12 +96,7 @@ export default function HeroSection() {
 
         @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
         @keyframes fadeUp  { from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes mobDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
-
-        @keyframes navReveal {
-          from { opacity:0; transform:translateY(-10px); }
-          to   { opacity:1; transform:translateY(0); }
-        }
+        @keyframes navReveal { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
         @keyframes headingReveal {
           0%   { opacity:0; transform:translateY(40px) scale(.96); filter:blur(8px); }
           55%  { filter:blur(0); }
@@ -111,7 +105,7 @@ export default function HeroSection() {
         @keyframes subtextWipe {
           0%   { opacity:0; clip-path:inset(0 100% 0 0); transform:translateY(10px); }
           20%  { opacity:1; }
-          100% { opacity:1; clip-path:inset(0 0% 0 0);   transform:translateY(0); }
+          100% { opacity:1; clip-path:inset(0 0% 0 0); transform:translateY(0); }
         }
         @keyframes glowPulse {
           0%,100% { box-shadow:0 0 16px rgba(43,127,255,.38),0 0 0 0 rgba(43,127,255,0); }
@@ -135,51 +129,41 @@ export default function HeroSection() {
           0%,100% { border-color:rgba(255,255,255,.13); }
           50%     { border-color:rgba(43,127,255,.28); }
         }
+        @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes linkIn    { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes footerIn  { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
 
-        .h-fade-bg,
-        .h-fade-nav,
-        .h-fade-logo,
-        .h-fade-2,
-        .h-fade-3,
-        .h-fade-4 { opacity:0; }
-
-        .loaded .h-fade-bg   { animation:fadeIn       1.4s ease  .08s forwards; }
-        .loaded .h-fade-nav  { animation:navReveal     .7s cubic-bezier(.22,1,.36,1) .20s forwards; }
-        .loaded .h-fade-logo { animation:fadeIn        .7s ease  .18s forwards; }
+        /* ── Hero entrance ── */
+        .h-fade-bg,.h-fade-nav,.h-fade-logo,.h-fade-2,.h-fade-3,.h-fade-4 { opacity:0; }
+        .loaded .h-fade-bg   { animation:fadeIn        1.4s ease .08s forwards; }
+        .loaded .h-fade-nav  { animation:navReveal      .7s cubic-bezier(.22,1,.36,1) .20s forwards; }
+        .loaded .h-fade-logo { animation:fadeIn         .7s ease .18s forwards; }
         .loaded .h-fade-2    { animation:headingReveal 1.0s cubic-bezier(.22,1,.36,1) .38s forwards; }
         .loaded .h-fade-3    { animation:subtextWipe   1.1s cubic-bezier(.22,1,.36,1) .72s forwards; }
-        .loaded .h-fade-4    { animation:fadeUp        .8s  cubic-bezier(.22,1,.36,1) .98s forwards; }
-
+        .loaded .h-fade-4    { animation:fadeUp         .8s cubic-bezier(.22,1,.36,1) .98s forwards; }
         .loaded .hero-card   { animation:borderBreathe 5s ease-in-out 2s infinite; }
 
         .orb { position:absolute; border-radius:50%; pointer-events:none; filter:blur(100px); z-index:2; }
         .orb-blue  { width:560px; height:560px; background:radial-gradient(circle,rgba(43,127,255,.16) 0%,transparent 70%); bottom:-100px; left:-80px; animation:orbDrift 16s ease-in-out infinite; }
         .orb-white { width:340px; height:340px; background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 70%); top:15%; right:6%; animation:orbDrift 20s ease-in-out 4s infinite reverse; }
-
         .scan-line { position:absolute; left:0; right:0; height:100px; background:linear-gradient(to bottom,transparent,rgba(255,255,255,.055),transparent); pointer-events:none; animation:scanLine 9s linear 2.4s infinite; z-index:4; }
 
-        .hero-overlay { background:linear-gradient(115deg,rgba(10,10,12,.88) 0%,rgba(10,10,12,.52) 42%,rgba(10,10,12,.16) 100%); }
+        .hero-overlay  { background:linear-gradient(115deg,rgba(10,10,12,.88) 0%,rgba(10,10,12,.52) 42%,rgba(10,10,12,.16) 100%); }
         .hero-vignette { background:linear-gradient(to top,rgba(10,10,12,.84) 0%,rgba(10,10,12,.30) 50%,transparent 100%); }
 
         .future-pill {
           display:inline-flex; align-items:center; justify-content:center;
-          background:#ffffff; color:#111214;
-          height:82px; border-radius:90px; padding:12px 22px;
-          white-space:nowrap;
+          background:#fff; color:#111214; height:82px; border-radius:90px;
+          padding:12px 22px; white-space:nowrap;
           font-family:'Nanum Pen Script',cursive; font-weight:400;
           font-size:76.04px; line-height:80.49px; letter-spacing:-0.04em;
           vertical-align:middle;
           animation:pillFloat 4.2s ease-in-out 2.2s infinite;
-          transition:transform .25s ease,box-shadow .25s ease;
-          will-change:transform;
+          transition:transform .25s ease,box-shadow .25s ease; will-change:transform;
         }
         .future-pill:hover { animation-play-state:paused; transform:rotate(-2deg) scale(1.06); box-shadow:0 14px 44px rgba(0,0,0,.32); }
 
-        .hero-subtext {
-          font-family:'Plus Jakarta Sans',sans-serif; font-weight:500;
-          font-size:18px; line-height:1; letter-spacing:-0.02em;
-          color:#ffffff; margin:0; max-width:430px;
-        }
+        .hero-subtext { font-family:'Plus Jakarta Sans',sans-serif; font-weight:500; font-size:18px; line-height:1; letter-spacing:-0.02em; color:#fff; margin:0; max-width:430px; }
 
         .cta-btn {
           display:inline-flex; align-items:center; justify-content:center;
@@ -188,23 +172,62 @@ export default function HeroSection() {
           font-family:'Plus Jakarta Sans',sans-serif; font-weight:700;
           font-size:16px; line-height:1; letter-spacing:-0.01em; white-space:nowrap;
           animation:glowPulse 3s ease-in-out 2s infinite;
-          transition:background .2s ease,transform .15s ease;
+          transition:background .2s ease,transform .15s ease; text-decoration:none;
         }
-        .cta-btn:hover  { background:#1a6ee0 !important; transform:translateY(-3px) scale(1.03); }
+        .cta-btn:hover  { background:#1a6ee0; transform:translateY(-3px) scale(1.03); }
         .cta-btn:active { transform:scale(.97); }
 
-        .nav-lnk { position:relative; }
+        .nav-lnk { position:relative; text-decoration:none; }
         .nav-lnk::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1.5px; background:#fff; border-radius:99px; transition:width .22s ease; }
         .nav-lnk:hover::after { width:100%; }
 
-        .mob-menu { animation:mobDown .22s cubic-bezier(.22,1,.36,1) forwards; }
-        .mob-lnk { display:flex; align-items:center; justify-content:space-between; transition:color .16s ease,padding-left .16s ease; }
-        .mob-lnk:hover { color:#fff !important; padding-left:5px; }
-        .mob-arrow { opacity:0; transform:translateX(-4px); transition:opacity .16s,transform .16s; }
-        .mob-lnk:hover .mob-arrow { opacity:1; transform:translateX(0); }
-
+        .join-btn { text-decoration:none; }
         .join-btn:hover  { background:#1a6ee0 !important; transform:scale(1.03); }
         .join-btn:active { transform:scale(.97); }
+
+        /* ── Hamburger wrapper: mobile only via CSS (not Tailwind) ── */
+        .burger-wrap {
+          display: flex;
+          margin-left: auto;
+        }
+        @media (min-width: 768px) {
+          .burger-wrap { display: none; }
+        }
+
+        /* ── Hamburger button ── */
+        .burger-btn {
+          width:44px; height:44px; border-radius:12px;
+          border:1.5px solid rgba(255,255,255,0.13);
+          background:rgba(255,255,255,0.04);
+          display:flex; align-items:center; justify-content:center;
+          cursor:pointer; flex-shrink:0; outline:none;
+          -webkit-tap-highlight-color:transparent;
+          transition:background .22s ease,border-color .22s ease,
+                     box-shadow .22s ease,transform .18s cubic-bezier(.34,1.56,.64,1);
+        }
+        .burger-btn:hover { background:rgba(255,255,255,0.09); border-color:rgba(255,255,255,0.26); box-shadow:0 0 0 4px rgba(255,255,255,0.04); transform:scale(1.07); }
+        .burger-btn:active { transform:scale(0.93); transition-duration:.1s; }
+        .burger-lines { display:flex; flex-direction:column; align-items:flex-end; gap:5.5px; width:20px; }
+        .b-line { display:block; height:1.5px; border-radius:99px; background:rgba(255,255,255,0.88); transform-origin:center; transition:width .3s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1),opacity .22s ease; }
+        .b-line-1 { width:20px; }
+        .b-line-2 { width:13px; }
+        .b-line-3 { width:20px; }
+        .burger-btn:hover .b-line-2 { width:20px; }
+        .burger-btn.is-open .b-line-1 { transform:translateY(7px) rotate(45deg); }
+        .burger-btn.is-open .b-line-2 { width:0; opacity:0; }
+        .burger-btn.is-open .b-line-3 { transform:translateY(-7px) rotate(-45deg); }
+        .burger-btn.is-open { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.20); }
+
+        /* ── Mobile overlay ── */
+        .mob-overlay { position:fixed; inset:0; background:#000; z-index:200; display:flex; flex-direction:column; animation:overlayIn .2s ease forwards; }
+        .mob-link { font-family:'Plus Jakarta Sans',sans-serif; font-weight:400; font-size:46px; line-height:1; letter-spacing:-0.03em; color:rgba(255,255,255,0.7); text-align:right; text-decoration:none; opacity:0; display:block; transition:color .18s ease,letter-spacing .18s ease,transform .22s cubic-bezier(.22,1,.36,1); }
+        .mob-link:hover { color:#fff; letter-spacing:-0.01em; transform:translateX(-5px); }
+        .mob-link:nth-child(1) { animation:linkIn .36s cubic-bezier(.22,1,.36,1) .07s forwards; }
+        .mob-link:nth-child(2) { animation:linkIn .36s cubic-bezier(.22,1,.36,1) .13s forwards; }
+        .mob-link:nth-child(3) { animation:linkIn .36s cubic-bezier(.22,1,.36,1) .19s forwards; }
+        .mob-link:nth-child(4) { animation:linkIn .36s cubic-bezier(.22,1,.36,1) .25s forwards; }
+        .mob-link:nth-child(5) { animation:linkIn .36s cubic-bezier(.22,1,.36,1) .31s forwards; }
+        .mob-footer { opacity:0; animation:footerIn .4s ease .44s forwards; }
 
         @media (max-width:767px) {
           .future-pill { height:58px; font-size:56px; line-height:60px; padding:10px 18px; }
@@ -214,59 +237,63 @@ export default function HeroSection() {
         }
       `}</style>
 
+      {/* ── Fullscreen mobile menu ── */}
+      {menuOpen && (
+        <div className="mob-overlay">
+          <div style={{ display:"flex", justifyContent:"flex-end", padding:"14px 20px" }}>
+            <button aria-label="Close menu" onClick={() => setMenuOpen(false)} className="burger-btn is-open">
+              <span className="burger-lines">
+                <span className="b-line b-line-1"/><span className="b-line b-line-2"/><span className="b-line b-line-3"/>
+              </span>
+            </button>
+          </div>
+          <nav style={{ flex:"1", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-end", padding:"0 36px", gap:"38px" }}>
+            {allLinks.map(({ label, href, isAnchor }) => (
+              <a key={label} href={href} className="mob-link" onClick={(e) => handleAnchorClick(e, href, isAnchor)}>
+                {label}
+              </a>
+            ))}
+          </nav>
+          <div className="mob-footer" style={{ padding:"24px 36px", borderTop:"1px solid rgba(255,255,255,0.06)" }}>
+            <p style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:400, fontSize:"11px", letterSpacing:"0.06em", color:"rgba(255,255,255,0.28)", margin:0, textTransform:"uppercase" }}>
+              © 2025 – COPYRIGHT NIRVANA | PRIVACY
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Hero ── */}
       <div
         id="hero-section"
         ref={heroRef}
         onMouseMove={handleMouseMove}
         className={`hero-card relative overflow-hidden flex flex-col ${loaded ? "loaded" : ""}`}
-        style={{
-          margin      : "6px",
-          borderRadius: "18px",
-          border      : "1px solid rgba(255,255,255,0.13)",
-          minHeight   : "calc(100vh - 32px)",
-          background  : "#0f1011",
-          fontFamily  : "'Plus Jakarta Sans', sans-serif",
-        }}
+        style={{ margin:"6px", borderRadius:"18px", border:"1px solid rgba(255,255,255,0.13)", minHeight:"calc(100vh - 32px)", background:"#0f1011", fontFamily:"'Plus Jakarta Sans',sans-serif" }}
       >
-        <div className="orb orb-blue"  />
-        <div className="orb orb-white" />
-        <div className="scan-line" />
+        <div className="orb orb-blue"/><div className="orb orb-white"/><div className="scan-line"/>
 
-        {/* Video — desktop */}
-        <video
-          className="h-fade-bg absolute inset-0 w-full h-full object-cover pointer-events-none hidden md:block"
+        <video className="h-fade-bg absolute inset-0 w-full h-full object-cover pointer-events-none hidden md:block"
           src="/background.mp4" autoPlay loop muted playsInline
-          style={{
-            transform : `scale(1.04) translate(${mousePos.x * -12}px,${mousePos.y * -8}px)`,
-            filter    : "grayscale(100%) brightness(0.42)",
-            transition: "transform .08s linear",
-          }}
-        />
-        {/* Video — mobile */}
-        <video
-          className="h-fade-bg absolute inset-0 w-full h-full object-cover pointer-events-none block md:hidden"
+          style={{ transform:`scale(1.04) translate(${mousePos.x * -12}px,${mousePos.y * -8}px)`, filter:"grayscale(100%) brightness(0.42)", transition:"transform .08s linear" }}/>
+        <video className="h-fade-bg absolute inset-0 w-full h-full object-cover pointer-events-none block md:hidden"
           src="/bgmobile.mp4" autoPlay loop muted playsInline
-          style={{ filter:"grayscale(100%) brightness(0.42)" }}
-        />
+          style={{ filter:"grayscale(100%) brightness(0.42)" }}/>
 
-        <div className="hero-overlay absolute inset-0" style={{zIndex:3}} />
-        <div className="hero-vignette absolute bottom-0 left-0 right-0 h-64 pointer-events-none" style={{zIndex:3}} />
+        <div className="hero-overlay absolute inset-0" style={{zIndex:3}}/>
+        <div className="hero-vignette absolute bottom-0 left-0 right-0 h-64 pointer-events-none" style={{zIndex:3}}/>
 
         {/* ── NAVBAR ── */}
         <nav
           className="h-fade-nav relative flex items-center justify-between px-8 md:px-14 lg:px-20 h-[72px] shrink-0"
           style={{ zIndex:20 }}
         >
-          {/* Left links — desktop */}
+          {/* Left */}
           <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
             {desktopLeft.map(({ label, href, isAnchor }) => (
               <li key={label}>
-                <a
-                  href={href}
-                  className="nav-lnk"
+                <a href={href} className="nav-lnk"
                   style={{ ...navFont, color:"rgba(255,255,255,.82)" }}
-                  onClick={(e) => handleAnchorClick(e, href, isAnchor)}
-                >
+                  onClick={(e) => handleAnchorClick(e, href, isAnchor)}>
                   {label}
                 </a>
               </li>
@@ -279,157 +306,55 @@ export default function HeroSection() {
             className="h-fade-logo flex items-center md:absolute md:left-1/2 md:-translate-x-1/2"
             onClick={(e) => handleAnchorClick(e, "#hero-section", true)}
           >
-            <Image
-              src="/logo.svg"
-              alt="Nirvana Academy"
-              width={149}
-              height={50}
-              style={{ objectFit:"contain" }}
-              priority
-            />
+            <Image src="/logo.svg" alt="Nirvana Academy" width={149} height={50}
+              style={{ objectFit:"contain" }} priority/>
           </a>
 
-          {/* Right links + CTA — desktop */}
+          {/* Right + CTA */}
           <div className="hidden md:flex items-center gap-8">
             {desktopRight.map(({ label, href, isAnchor }) => (
-              <a
-                key={label}
-                href={href}
-                className="nav-lnk"
+              <a key={label} href={href} className="nav-lnk"
                 style={{ ...navFont, color:"rgba(255,255,255,.82)" }}
-                onClick={(e) => handleAnchorClick(e, href, isAnchor)}
-              >
+                onClick={(e) => handleAnchorClick(e, href, isAnchor)}>
                 {label}
               </a>
             ))}
-            <a
-              href="#contact"
-              className="join-btn"
-              style={joinBtnStyle}
-              onClick={(e) => handleAnchorClick(e, "#contact", true)}
-            >
+            <a href="#contact" className="join-btn" style={joinBtnStyle}
+              onClick={(e) => handleAnchorClick(e, "#contact", true)}>
               Join Nirvana
             </a>
           </div>
 
-          {/* Hamburger — mobile */}
-          <button
-            aria-label={menuOpen ? "Close" : "Menu"}
-            onClick={() => setMenuOpen(v => !v)}
-            className="md:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] ml-auto"
-            style={{
-              borderRadius: 9,
-              background  : menuOpen ? "rgba(255,255,255,.09)" : "transparent",
-              transition  : "background .2s",
-              flexShrink  : 0,
-            }}
-          >
-            <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen?"w-5 rotate-45 translate-y-[6.5px]":"w-5"}`} style={{borderRadius:2}}/>
-            <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen?"w-0 opacity-0":"w-[13px]"}`} style={{borderRadius:2}}/>
-            <span className={`block h-[1.5px] bg-white transition-all duration-300 ${menuOpen?"w-5 -rotate-45 -translate-y-[6.5px]":"w-5"}`} style={{borderRadius:2}}/>
-          </button>
+          {/* HAMBURGER — inside .burger-wrap which CSS hides at ≥768px */}
+          <div className="burger-wrap">
+            <button
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMenuOpen(v => !v)}
+              className={`burger-btn ${menuOpen ? "is-open" : ""}`}
+            >
+              <span className="burger-lines">
+                <span className="b-line b-line-1"/><span className="b-line b-line-2"/><span className="b-line b-line-3"/>
+              </span>
+            </button>
+          </div>
         </nav>
 
-        {/* ── MOBILE DROPDOWN ── */}
-        {menuOpen && (
-          <div
-            className="mob-menu relative md:hidden mx-4 mb-2 overflow-hidden"
-            style={{
-              borderRadius  : 14,
-              border        : "1px solid rgba(255,255,255,.10)",
-              background    : "rgba(15,16,17,.96)",
-              backdropFilter: "blur(24px)",
-              zIndex        : 20,
-            }}
-          >
-            <div className="grid grid-cols-2 gap-[6px] p-3">
-              {allLinks.map(({ label, href, isAnchor }) => (
-                <a
-                  key={label}
-                  href={href}
-                  onClick={(e) => handleAnchorClick(e, href, isAnchor)}
-                  className="mob-lnk"
-                  style={{
-                    ...navFont,
-                    color       : "rgba(255,255,255,.70)",
-                    padding     : "13px 14px",
-                    borderRadius: 10,
-                    background  : "rgba(255,255,255,.04)",
-                    border      : "1px solid rgba(255,255,255,.06)",
-                  }}
-                >
-                  {label}
-                  <svg className="mob-arrow w-4 h-4" fill="none" viewBox="0 0 16 16"
-                    style={{color:"rgba(255,255,255,.38)"}}>
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </a>
-              ))}
-            </div>
-            <div style={{ height:1, background:"rgba(255,255,255,.07)", margin:"0 12px" }}/>
-            <div className="p-3">
-              <a
-                href="#contact"
-                onClick={(e) => handleAnchorClick(e, "#contact", true)}
-                className="join-btn flex items-center justify-center gap-2 w-full"
-                style={{
-                  ...joinBtnStyle,
-                  width       : "100%",
-                  borderRadius: 12,
-                  paddingLeft : 20,
-                  paddingRight: 20,
-                  boxShadow   : "0 4px 24px rgba(43,127,255,.42)",
-                }}
-              >
-                Join Nirvana
-                <svg width="15" height="15" fill="none" viewBox="0 0 16 16">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        )}
-
         {/* ── HERO CONTENT ── */}
-        <div
-          className="relative flex-1 flex flex-col justify-end pb-14 md:pb-24 px-8 md:px-14 lg:px-20"
-          style={{ zIndex:10 }}
-        >
-          <h1
-            className="h-fade-2 text-white mb-5 md:mb-[18px]"
-            style={{
-              fontFamily   : "'Plus Jakarta Sans', sans-serif",
-              fontWeight   : 500,
-              fontSize     : "clamp(36px, 6.5vw, 75.84px)",
-              lineHeight   : 1,
-              letterSpacing: "-0.04em",
-            }}
-          >
+        <div className="relative flex-1 flex flex-col justify-end pb-14 md:pb-24 px-8 md:px-14 lg:px-20" style={{zIndex:10}}>
+          <h1 className="h-fade-2 text-white mb-5 md:mb-[18px]"
+            style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:500, fontSize:"clamp(36px,6.5vw,75.84px)", lineHeight:1, letterSpacing:"-0.04em" }}>
             <span className="block">Master DeFi,</span>
-            <span
-              className="flex flex-wrap items-center gap-x-3 gap-y-2"
-              style={{
-                marginTop : "clamp(6px, 1vw, 10px)",
-                lineHeight: "clamp(58px, 6.5vw, 82px)",
-              }}
-            >
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-2"
+              style={{ marginTop:"clamp(6px,1vw,10px)", lineHeight:"clamp(58px,6.5vw,82px)" }}>
               Launch your
               <span className="future-pill">Future</span>
             </span>
           </h1>
-
           <div className="h-fade-3 mb-8">
-            <p className="hero-subtext">
-              To know is to be free: This is the way of Nirvana.
-            </p>
+            <p className="hero-subtext">To know is to be free: This is the way of Nirvana.</p>
           </div>
-
           <div className="h-fade-4">
-            <a
-              href="#about"
-              className="cta-btn"
-              onClick={(e) => handleAnchorClick(e, "#about", true)}
-            >
+            <a href="#about" className="cta-btn" onClick={(e) => handleAnchorClick(e, "#about", true)}>
               Get Started
             </a>
           </div>
