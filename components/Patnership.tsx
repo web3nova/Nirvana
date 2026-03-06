@@ -59,7 +59,7 @@ export default function PartnershipSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full flex flex-col items-center py-16 px-4 bg-white overflow-hidden"
+      className="relative w-full flex flex-col items-center mt-[60px] py-16 px-4 bg-white overflow-hidden"
       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
     >
       <style>{`

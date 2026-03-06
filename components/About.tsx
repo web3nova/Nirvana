@@ -6,15 +6,14 @@ import { useEffect, useRef } from "react";
 const JAKARTA = "var(--font-jakarta, 'Plus Jakarta Sans', sans-serif)";
 
 const paragraphs = [
-  "You already know how this story begins.",
-  "Not with glory. Not with fanfare. But with a restlessness — the kind that keeps you awake at night, whispering that you were never meant for average.",
-  "Five years ago, I answered to that whisper. I walked away from the comfort of following, and instead chose the uncertainty of building. Nirvana Academy was born from that choice — a rebellion against complacency; a commitment to create a place where greatness was not the exception, but the norm.",
-  "I started Nirvana because I was tired of seeing potential wasted. Tired of a culture that taught us to consume instead of build. I believed — and still believe — that crypto, Web3, and the future of technology deserve more than passive spectators. They deserve fearless architects. Today, that simple idea has grown into a global community of nearly 10,000 graduates strong — with countless success stories written by those who dared to bet on themselves. We've built projects, launched startups, forged careers, and most importantly, we've created a movement that dares one truth:",
+  "You already know how this story begins. Not with glory. Not with fanfare. But with a restlessness — the kind that keeps you awake at night, whispering that you were never meant for average.",
+  "Five years ago, I answered to that whisper. I walked away from the comfort of following, and instead chose the uncertainty of building. Nirvana Academy was born from that choice — a rebellion against complacency, a commitment to create a place where ambition was not the exception, but the norm.",
+  "I started Nirvana because I was tired of seeing potential wasted. Tired of a culture that taught us to consume instead of build. I believed — and still believe — that crypto, Web3, and the future of technology deserve more than passive spectators. They deserve fearless architects. Today, that simple idea has grown into a global community — over 10,000 graduates strong — with countless success stories written by those who dared to bet on themselves. We've built projects, launched startups, forged careers, and, most importantly, we've created a movement that proves one truth:",
   "You are the builder you've been waiting for.",
-  "Nirvana Academy is not just an institution. It's a proving ground. A family. A revolution in how we learn, lead, and leave our mark. We've built projects, launched startups, forged careers, and most importantly, we created a movement that proves one truth:",
+  "Nirvana Academy is not just an institution. It's a proving ground. A family. A revolution in how we learn, lead, and leave our mark. We've built projects, launched startups, forged careers, and, most importantly, we've created a movement that proves one truth:",
+  "You are the builder you've been waiting for.",
   "Nirvana Academy is not just an institution. It's a proving ground. A family. A revolution in how we learn, lead, and leave our mark.",
-  "You are not here by accident.",
-  "You are here because something inside you knows — you were made for more.",
+  "You are not here by accident. You are here because something inside you knows — you were made for more.",
 ];
 
 const FLOATING_TICKER_ITEMS = Array(12).fill("NIRVANA ACADEMY");
@@ -62,7 +61,7 @@ export default function About() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
         @keyframes scrollRight {
           0%   { transform: translateX(-50%); }
@@ -72,22 +71,6 @@ export default function About() {
           0%   { transform: rotate(1.03deg) translateY(0px); }
           50%  { transform: rotate(1.03deg) translateY(-5px); }
           100% { transform: rotate(1.03deg) translateY(0px); }
-        }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(48px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeLeft {
-          from { opacity: 0; transform: translateX(-56px); }
-          to   { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes fadeRight {
-          from { opacity: 0; transform: translateX(56px); }
-          to   { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.6) rotate(-20deg); }
-          to   { opacity: 1; transform: scale(1) rotate(0deg); }
         }
         @keyframes watermarkFade {
           from { opacity: 0; }
@@ -108,11 +91,14 @@ export default function About() {
         .reveal-right { transition-delay: 0.15s; }
 
         .about-para {
+          font-family: 'Plus Jakarta Sans', sans-serif;
           font-weight: 400;
-          font-size: 13px;
+          font-style: normal;
+          font-size: 16px;
           line-height: 137%;
-          color: #3d3d3d;
-          margin: 0 0 7px 0;
+          letter-spacing: 0%;
+          color: #333333;
+          margin: 0 0 12px 0;
           padding: 0;
           opacity: 0;
           transform: translateY(12px);
@@ -126,7 +112,7 @@ export default function About() {
           position: absolute;
           display: block;
           width: 112px; height: 112px;
-          bottom: -44px; right: -25px;
+          bottom: 16px; right: 16px;
           left: auto; top: auto;
           z-index: 10;
           opacity: 0;
@@ -219,14 +205,14 @@ export default function About() {
         .about-card-row {
           position: relative; z-index: 2;
           display: flex; flex-direction: row;
-          align-items: flex-start; justify-content: center;
+          align-items: stretch; justify-content: center;
           gap: 16px; padding: 0 32px 80px;
           box-sizing: border-box;
         }
         .about-text-card {
-          width: 644px; height: 832px;
+          width: 644px; height: auto;
           flex-shrink: 0; position: relative;
-          border-radius: 12px; overflow: visible;
+          border-radius: 12px; overflow: hidden;
           box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
         }
         .about-text-card-bg {
@@ -235,12 +221,15 @@ export default function About() {
         }
         .about-text-content {
           position: relative; z-index: 1;
-          padding: 48px; height: 100%;
+          padding: 48px; 
           box-sizing: border-box;
-          display: flex; flex-direction: column; overflow: hidden;
+          display: flex; flex-direction: column;
+        }
+        .about-para-scroll {
+          flex: 1;
         }
         .about-photo-card {
-          width: 539px; height: 832px;
+          width: 539px; height: auto; min-height: 832px;
           flex-shrink: 0; position: relative;
           border-radius: 12px; overflow: hidden;
           box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
@@ -254,10 +243,10 @@ export default function About() {
           .about-watermark { top: 110px; font-size: 160px; line-height: 170px; }
           .about-card-row  { flex-direction: column; align-items: center; gap: 24px; padding: 0 24px 90px; }
           .about-text-card { width: 100%; max-width: 680px; height: auto; }
-          .about-text-content { padding: 40px 40px 56px; height: auto; overflow: visible; }
+          .about-text-content { padding: 40px; height: auto; overflow: visible; }
           .about-h1   { font-size: 36px; line-height: 40px; }
-          .about-para { font-size: 14px; margin-bottom: 8px; }
-          .about-stamp { width: 96px; height: 96px; bottom: -36px; right: 20px; }
+          .about-para { font-size: 15px; margin-bottom: 9px; }
+          .about-stamp { width: 96px; height: 96px; bottom: 16px; right: 16px; }
           .about-photo-card { width: 100%; max-width: 680px; height: 0; padding-bottom: 66%; }
           .floating-ticker-label { font-size: 36px; line-height: 40px; }
           .floating-ticker-outer { height: 60px; }
@@ -270,9 +259,9 @@ export default function About() {
           .about-watermark { top: 90px; font-size: 100px; line-height: 110px; }
           .about-card-row  { flex-direction: column; align-items: stretch; gap: 16px; padding: 0 16px 48px; }
           .about-text-card { width: 100%; height: auto; border-radius: 10px; }
-          .about-text-content { padding: 28px 24px 80px; height: auto; overflow: visible; }
+          .about-text-content { padding: 28px 24px; height: auto; overflow: visible; }
           .about-h1   { font-size: 28px; line-height: 32px; margin-bottom: 14px; }
-          .about-para { font-size: 13px; line-height: 140%; margin-bottom: 6px; }
+          .about-para { font-size: 14px; line-height: 140%; margin-bottom: 7px; }
           .about-stamp { width: 72px; height: 72px; bottom: 16px; right: 16px; }
           .about-photo-card { width: 100%; height: 0; padding-bottom: 90%; border-radius: 10px; }
           .floating-ticker-label { font-size: 28px; line-height: 34px; }
@@ -284,9 +273,9 @@ export default function About() {
           .about-watermark { top: 72px; font-size: 64px; line-height: 72px; }
           .about-card-row  { padding: 0 12px 40px; gap: 12px; }
           .about-text-card { border-radius: 8px; }
-          .about-text-content { padding: 22px 18px 70px; }
+          .about-text-content { padding: 22px 18px; }
           .about-h1   { font-size: 24px; line-height: 28px; margin-bottom: 12px; }
-          .about-para { font-size: 12.5px; line-height: 138%; margin-bottom: 5px; }
+          .about-para { font-size: 13px; line-height: 138%; margin-bottom: 6px; }
           .about-stamp { width: 56px; height: 56px; bottom: 12px; right: 12px; }
           .about-photo-card { height: 0; padding-bottom: 100%; border-radius: 8px; }
           .floating-ticker-label { font-size: 22px; line-height: 28px; }
@@ -318,17 +307,19 @@ export default function About() {
               <h1 className="about-h1" ref={headingRef} style={{ fontFamily: JAKARTA }}>
                 From The<br />Founder&apos;s Notes.
               </h1>
-              <div ref={parasRef} className="reveal-up" style={{ flex: 1 }}>
-                {paragraphs.map((text, i) => (
-                  <p key={i} className="about-para" style={{ fontFamily: JAKARTA }}>{text}</p>
-                ))}
-                <p className="about-para" style={{ fontFamily: JAKARTA }}>
-                  Welcome to Nirvana Academy.<br />Welcome home.
-                </p>
+              <div className="about-para-scroll">
+                <div ref={parasRef} className="reveal-up">
+                  {paragraphs.map((text, i) => (
+                    <p key={i} className="about-para">{text}</p>
+                  ))}
+                  <p className="about-para">
+                    Welcome to Nirvana Academy.<br />Welcome home.
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Stamp */}
+            {/* Stamp — inside card, bottom-right corner */}
             <div className="about-stamp">
               <Image
                 src="/stamp.png"
@@ -357,63 +348,62 @@ export default function About() {
               pointerEvents: "none",
             }} />
 
-<div
-  className="xeus-badge"
-  style={{
-    backgroundImage     : `url("data:image/svg+xml,%3Csvg width='193' height='76' viewBox='0 0 193 76' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M193 64C193 70.6274 187.627 76 181 76H12C5.37258 76 0 70.6274 0 64V43.8291C0 37.2017 5.37258 31.8291 12 31.8291H31C37.6274 31.8291 43 26.4565 43 19.8291V12C43 5.37258 48.3726 0 55 0H141C147.627 0 153 5.37258 153 12V19.8291C153 26.4565 158.373 31.8291 165 31.8291H181C187.627 31.8291 193 37.2017 193 43.8291V64Z' fill='black' fill-opacity='0.25'/%3E%3C/svg%3E")`,
-    backgroundRepeat    : "no-repeat",
-    backgroundSize      : "100% 100%",
-    backdropFilter      : "blur(4px)",
-    WebkitBackdropFilter: "blur(4px)",
-    display             : "flex",
-    flexDirection       : "column",
-    alignItems          : "center",
-    justifyContent      : "flex-end",
-    paddingBottom       : "10px",
-    boxSizing           : "border-box",
-  }}
->
-  <p
-    className="xeus-name"
-    style={{
-      fontFamily   : JAKARTA,
-      fontWeight   : 700,
-      fontSize     : "28px",
-      lineHeight   : "31.4px",
-      letterSpacing: "-0.04em",
-      color        : "#EEEEEE",
-      textTransform: "capitalize",
-      margin       : 0,
-      padding      : 0,
-      whiteSpace   : "nowrap",
-      textAlign    : "center",
-    }}
-  >
-    Xeus
-  </p>
-  <p
-    className="xeus-title"
-    style={{
-      fontFamily   : JAKARTA,
-      fontWeight   : 500,
-      fontSize     : "14px",
-      lineHeight   : "22.4px",
-      letterSpacing: "-0.04em",
-      color        : "rgba(238,238,238,0.70)",
-      textTransform: "capitalize",
-      margin       : 0,
-      padding      : 0,
-      whiteSpace   : "nowrap",
-      textAlign    : "center",
-    }}
-  >
-    Founder, Nirvana Academy
-  </p>
-</div>
+            <div
+              className="xeus-badge"
+              style={{
+                backgroundImage     : `url("data:image/svg+xml,%3Csvg width='193' height='76' viewBox='0 0 193 76' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M193 64C193 70.6274 187.627 76 181 76H12C5.37258 76 0 70.6274 0 64V43.8291C0 37.2017 5.37258 31.8291 12 31.8291H31C37.6274 31.8291 43 26.4565 43 19.8291V12C43 5.37258 48.3726 0 55 0H141C147.627 0 153 5.37258 153 12V19.8291C153 26.4565 158.373 31.8291 165 31.8291H181C187.627 31.8291 193 37.2017 193 43.8291V64Z' fill='black' fill-opacity='0.25'/%3E%3C/svg%3E")`,
+                backgroundRepeat    : "no-repeat",
+                backgroundSize      : "100% 100%",
+                backdropFilter      : "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
+                display             : "flex",
+                flexDirection       : "column",
+                alignItems          : "center",
+                justifyContent      : "flex-end",
+                paddingBottom       : "10px",
+                boxSizing           : "border-box",
+              }}
+            >
+              <p
+                className="xeus-name"
+                style={{
+                  fontFamily   : JAKARTA,
+                  fontWeight   : 700,
+                  fontSize     : "28px",
+                  lineHeight   : "31.4px",
+                  letterSpacing: "-0.04em",
+                  color        : "#EEEEEE",
+                  textTransform: "capitalize",
+                  margin       : 0,
+                  padding      : 0,
+                  whiteSpace   : "nowrap",
+                  textAlign    : "center",
+                }}
+              >
+                Xeus
+              </p>
+              <p
+                className="xeus-title"
+                style={{
+                  fontFamily   : JAKARTA,
+                  fontWeight   : 500,
+                  fontSize     : "14px",
+                  lineHeight   : "22.4px",
+                  letterSpacing: "-0.04em",
+                  color        : "rgba(238,238,238,0.70)",
+                  textTransform: "capitalize",
+                  margin       : 0,
+                  padding      : 0,
+                  whiteSpace   : "nowrap",
+                  textAlign    : "center",
+                }}
+              >
+                Founder, Nirvana Academy
+              </p>
+            </div>
           </div>
         </div>
-      </div>   {/* Frosted glass name badge */}
-          
+      </div>
 
       {/* Floating ticker */}
       <div style={{ width: "100%", overflow: "hidden", position: "relative", padding: "28px 0", backgroundColor: "#ffffff" }}>

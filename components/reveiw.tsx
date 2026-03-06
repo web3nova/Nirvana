@@ -41,7 +41,7 @@ export default function Review() {
     }, []);
 
     return (
-        <section className="py-20 lg:py-32 bg-white overflow-hidden font-jakarta">
+        <section className="py-20 lg:py-32 bg-white overflow- mt-[20px] font-jakarta">
             <div className="container mx-auto px-4">
 
                 {/* Heading */}

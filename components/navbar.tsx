@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const desktopLeft = [
-  { label: "Home",     href: "/",        isAnchor: false },
+  { label: "Home",     href: "/",         isAnchor: false },
   { label: "Articles", href: "/#articles", isAnchor: false },
   { label: "Course",   href: "/#courses",  isAnchor: false },
 ];
@@ -15,29 +15,34 @@ const desktopRight = [
 ];
 
 const allLinks = [
-  { label: "Home",     href: "/",         isAnchor: false },
+  { label: "Home",     href: "/",          isAnchor: false },
   { label: "Articles", href: "/#articles", isAnchor: false },
   { label: "Course",   href: "/#courses",  isAnchor: false },
   { label: "Events",   href: "/Events",    isAnchor: false },
   { label: "Team",     href: "/#team",     isAnchor: false },
 ];
 
-export default function Navbar() {
-  const [menuOpen,  setMenuOpen]  = useState(false);
-  const [visible,   setVisible]   = useState(false);
-  const [hasHero,   setHasHero]   = useState(true); // assume hero until confirmed otherwise
+export default function Navbar({ forceLight = false }: { forceLight?: boolean }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [visible,  setVisible]  = useState(false);
+  const [hasHero,  setHasHero]  = useState(true);
 
   useEffect(() => {
-    const hero = document.getElementById("hero-section");
-
-    if (!hero) {
-      // No hero on this page (e.g. Events) → show immediately, use light theme
+    // If forceLight is set (e.g. Events page), skip hero detection
+    if (forceLight) {
       setHasHero(false);
       setVisible(true);
       return;
     }
 
-    // Hero exists → show only after hero scrolls out
+    const hero = document.getElementById("hero-section");
+
+    if (!hero) {
+      setHasHero(false);
+      setVisible(true);
+      return;
+    }
+
     setHasHero(true);
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(!entry.isIntersecting),
@@ -45,7 +50,7 @@ export default function Navbar() {
     );
     observer.observe(hero);
     return () => observer.disconnect();
-  }, []);
+  }, [forceLight]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -66,21 +71,21 @@ export default function Navbar() {
   };
 
   // ── Theme tokens ─────────────────────────────────────
-  const isDark = hasHero; // dark theme on hero pages, light on others
+  // isDark = true only when on hero page AND hero is visible
+  const isDark = hasHero && !forceLight;
 
-  const navBg        = isDark ? "rgba(15,16,17,0.92)"          : "#ffffff";
-  const navBorder    = isDark ? "rgba(255,255,255,0.12)"        : "transparent";
-  const navBorderBottom = isDark ? undefined : "";
-  const linkColor    = isDark ? "rgba(255,255,255,0.82)"        : "rgba(20,20,20,0.80)";
-  const underlineClr = isDark ? "#fff"                          : "#111";
-  const logoSrc      = isDark ? "/logo.svg"                     : "/logob.svg";
-  const lineClr      = isDark ? "rgba(255,255,255,0.88)"        : "rgba(20,20,20,0.70)";
-  const btnBorderClr = isDark ? "rgba(255,255,255,0.13)"        : "rgba(0,0,0,0.12)";
-  const btnBg        = isDark ? "rgba(255,255,255,0.04)"        : "rgba(0,0,0,0.03)";
-  const btnHoverBg   = isDark ? "rgba(255,255,255,0.09)"        : "rgba(0,0,0,0.07)";
-  const btnHoverBdr  = isDark ? "rgba(255,255,255,0.26)"        : "rgba(0,0,0,0.20)";
-  const btnOpenBg    = isDark ? "rgba(255,255,255,0.07)"        : "rgba(0,0,0,0.05)";
-  const btnOpenBdr   = isDark ? "rgba(255,255,255,0.20)"        : "rgba(0,0,0,0.16)";
+  const navBg           = isDark ? "rgba(15,16,17,0.92)"    : "#ffffff";
+  const navBorder       = isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.07)";
+  const linkColor       = isDark ? "rgba(255,255,255,0.82)" : "rgba(20,20,20,0.80)";
+  const underlineClr    = isDark ? "#fff"                   : "#111";
+  const logoSrc         = isDark ? "/logo.svg"              : "/logob.svg";
+  const lineClr         = isDark ? "rgba(255,255,255,0.88)" : "rgba(20,20,20,0.70)";
+  const btnBorderClr    = isDark ? "rgba(255,255,255,0.13)" : "rgba(0,0,0,0.12)";
+  const btnBg           = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)";
+  const btnHoverBg      = isDark ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.07)";
+  const btnHoverBdr     = isDark ? "rgba(255,255,255,0.26)" : "rgba(0,0,0,0.20)";
+  const btnOpenBg       = isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)";
+  const btnOpenBdr      = isDark ? "rgba(255,255,255,0.20)" : "rgba(0,0,0,0.16)";
 
   const navFont: React.CSSProperties = {
     fontFamily   : "'Plus Jakarta Sans', sans-serif",
@@ -122,7 +127,6 @@ export default function Navbar() {
         }
         .nav-enter { animation: navDown .32s cubic-bezier(.22,1,.36,1) forwards; }
 
-        /* ── Nav links ── */
         .nav-lnk { position: relative; text-decoration: none; }
         .nav-lnk::after {
           content: ''; position: absolute; bottom: -3px; left: 0;
@@ -132,7 +136,6 @@ export default function Navbar() {
         }
         .nav-lnk:hover::after { width: 100%; }
 
-        /* ── Hamburger: mobile only ── */
         .burger-wrap { display: flex; margin-left: auto; }
         @media (min-width: 768px) { .burger-wrap { display: none; } }
 
@@ -147,8 +150,8 @@ export default function Navbar() {
                       box-shadow .22s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
         }
         .burger-btn:hover {
-          background: var(--btn-hover-bg, rgba(255,255,255,0.09));
-          border-color: var(--btn-hover-bdr, rgba(255,255,255,0.26));
+          background: var(--btn-hover-bg);
+          border-color: var(--btn-hover-bdr);
           box-shadow: 0 0 0 4px rgba(128,128,128,0.08);
           transform: scale(1.07);
         }
@@ -170,11 +173,10 @@ export default function Navbar() {
         .burger-btn.is-open .b-line-2 { width: 0; opacity: 0; }
         .burger-btn.is-open .b-line-3 { transform: translateY(-7px) rotate(-45deg); }
         .burger-btn.is-open {
-          background: var(--btn-open-bg, rgba(255,255,255,0.07));
-          border-color: var(--btn-open-bdr, rgba(255,255,255,0.20));
+          background: var(--btn-open-bg);
+          border-color: var(--btn-open-bdr);
         }
 
-        /* ── Mobile overlay ── */
         @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes linkIn    { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes footerIn  { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
@@ -208,14 +210,14 @@ export default function Navbar() {
       <div
         style={{
           position     : "fixed",
-          top: 0, left: 0, right: 0,
+          top          : 6,
+          left         : 6,
+          right        : 6,
           zIndex       : 50,
-          padding      : "10px 10px 0",
           opacity      : visible ? 1 : 0,
           pointerEvents: visible ? "auto" : "none",
           transition   : "opacity .3s ease",
           fontFamily   : "'Plus Jakarta Sans', sans-serif",
-          // CSS custom properties for theme tokens
           ["--underline-clr" as any]: underlineClr,
           ["--line-clr"      as any]: lineClr,
           ["--btn-border"    as any]: btnBorderClr,
@@ -233,13 +235,12 @@ export default function Navbar() {
             background          : navBg,
             backdropFilter      : "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            borderRadius        : "14px",
+            borderRadius        : "18px",
             border              : `1px solid ${navBorder}`,
-            borderBottom        : navBorderBottom,
-            boxShadow           : isDark ? "none" : "0 1px 0 rgba(0,0,0,0.06)",
+            boxShadow           : isDark ? "none" : "0 2px 16px rgba(0,0,0,0.07)",
           }}
         >
-          <nav className="h-[64px] flex items-center justify-between px-5 md:px-8 relative">
+          <nav className="h-[72px] flex items-center justify-between px-8 md:px-14 lg:px-20 relative">
 
             {/* LEFT — desktop */}
             <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
@@ -254,7 +255,7 @@ export default function Navbar() {
               ))}
             </ul>
 
-            {/* CENTER LOGO — dark page uses logo.svg, light page uses logob.svg */}
+            {/* CENTER LOGO */}
             <a
               href="/"
               className="flex items-center gap-[10px] md:absolute md:left-1/2 md:-translate-x-1/2"
@@ -284,7 +285,7 @@ export default function Navbar() {
               </a>
             </div>
 
-            {/* HAMBURGER — CSS hides at ≥768px */}
+            {/* HAMBURGER */}
             <div className="burger-wrap">
               <button
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -306,9 +307,20 @@ export default function Navbar() {
       {menuOpen && (
         <div className="mob-overlay">
           <div style={{ display: "flex", justifyContent: "flex-end", padding: "14px 20px" }}>
-            <button aria-label="Close menu" onClick={() => setMenuOpen(false)}
+            <button
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
               className="burger-btn is-open"
-              style={{ ["--btn-border" as any]: "rgba(255,255,255,0.13)", ["--btn-bg" as any]: "rgba(255,255,255,0.04)", ["--btn-open-bg" as any]: "rgba(255,255,255,0.07)", ["--btn-open-bdr" as any]: "rgba(255,255,255,0.20)", ["--btn-hover-bg" as any]: "rgba(255,255,255,0.09)", ["--btn-hover-bdr" as any]: "rgba(255,255,255,0.26)", ["--line-clr" as any]: "rgba(255,255,255,0.88)" }}>
+              style={{
+                ["--btn-border"    as any]: "rgba(255,255,255,0.13)",
+                ["--btn-bg"        as any]: "rgba(255,255,255,0.04)",
+                ["--btn-open-bg"   as any]: "rgba(255,255,255,0.07)",
+                ["--btn-open-bdr"  as any]: "rgba(255,255,255,0.20)",
+                ["--btn-hover-bg"  as any]: "rgba(255,255,255,0.09)",
+                ["--btn-hover-bdr" as any]: "rgba(255,255,255,0.26)",
+                ["--line-clr"      as any]: "rgba(255,255,255,0.88)",
+              }}
+            >
               <span className="burger-lines">
                 <span className="b-line b-line-1" />
                 <span className="b-line b-line-2" />

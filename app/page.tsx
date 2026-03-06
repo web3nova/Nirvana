@@ -10,6 +10,7 @@ import About from "@/components/About";
 import Review from "@/components/reveiw";
 import Faq from "@/components/faq";
 import Contact from "@/components/contact";
+import Event from "@/components/event";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <section id="ecosystem"><Ecosystem /></section>
       <section id="courses"><Courses /></section>
       <section id="reviews"><Review /></section>
+      <section id="events"><Event /></section>
       <section id="partners"><PartnershipSection /></section>
       <section id="team"><Team /></section>
       <section id="faq"><Faq /></section>

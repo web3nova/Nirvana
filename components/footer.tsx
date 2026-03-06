@@ -62,7 +62,7 @@ export default function Footer() {
   return (
     <footer
       className="
-        w-[98%] mx-auto
+        w-[99.5%] mx-auto
         bg-[#111111] text-white overflow-hidden
         rounded-tl-[36px] rounded-tr-[36px]
         sm:rounded-tl-[52px] sm:rounded-tr-[52px]

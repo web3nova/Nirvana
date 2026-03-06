@@ -94,6 +94,9 @@ export default function HeroSection() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Nanum+Pen+Script&display=swap');
 
+        /* Reset any default body/html margin/padding that could cause gaps */
+        html, body { margin: 0; padding: 0; }
+
         @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
         @keyframes fadeUp  { from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:translateY(0)} }
         @keyframes navReveal { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
@@ -125,10 +128,6 @@ export default function HeroSection() {
           0%   { top:-120px; opacity:.07; }
           100% { top:120%;   opacity:.01; }
         }
-        @keyframes borderBreathe {
-          0%,100% { border-color:rgba(255,255,255,.13); }
-          50%     { border-color:rgba(43,127,255,.28); }
-        }
         @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes linkIn    { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes footerIn  { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
@@ -141,7 +140,6 @@ export default function HeroSection() {
         .loaded .h-fade-2    { animation:headingReveal 1.0s cubic-bezier(.22,1,.36,1) .38s forwards; }
         .loaded .h-fade-3    { animation:subtextWipe   1.1s cubic-bezier(.22,1,.36,1) .72s forwards; }
         .loaded .h-fade-4    { animation:fadeUp         .8s cubic-bezier(.22,1,.36,1) .98s forwards; }
-        .loaded .hero-card   { animation:borderBreathe 5s ease-in-out 2s infinite; }
 
         .orb { position:absolute; border-radius:50%; pointer-events:none; filter:blur(100px); z-index:2; }
         .orb-blue  { width:560px; height:560px; background:radial-gradient(circle,rgba(43,127,255,.16) 0%,transparent 70%); bottom:-100px; left:-80px; animation:orbDrift 16s ease-in-out infinite; }
@@ -157,7 +155,7 @@ export default function HeroSection() {
           padding:12px 22px; white-space:nowrap;
           font-family:'Nanum Pen Script',cursive; font-weight:400;
           font-size:76.04px; line-height:80.49px; letter-spacing:-0.04em;
-          vertical-align:middle;
+          vertical-align:middle; position:relative; top:-2px;
           animation:pillFloat 4.2s ease-in-out 2.2s infinite;
           transition:transform .25s ease,box-shadow .25s ease; will-change:transform;
         }
@@ -185,7 +183,6 @@ export default function HeroSection() {
         .join-btn:hover  { background:#1a6ee0 !important; transform:scale(1.03); }
         .join-btn:active { transform:scale(.97); }
 
-        /* ── Hamburger wrapper: mobile only via CSS (not Tailwind) ── */
         .burger-wrap {
           display: flex;
           margin-left: auto;
@@ -194,7 +191,6 @@ export default function HeroSection() {
           .burger-wrap { display: none; }
         }
 
-        /* ── Hamburger button ── */
         .burger-btn {
           width:44px; height:44px; border-radius:12px;
           border:1.5px solid rgba(255,255,255,0.13);
@@ -218,7 +214,6 @@ export default function HeroSection() {
         .burger-btn.is-open .b-line-3 { transform:translateY(-7px) rotate(-45deg); }
         .burger-btn.is-open { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.20); }
 
-        /* ── Mobile overlay ── */
         .mob-overlay { position:fixed; inset:0; background:#000; z-index:200; display:flex; flex-direction:column; animation:overlayIn .2s ease forwards; }
         .mob-link { font-family:'Plus Jakarta Sans',sans-serif; font-weight:400; font-size:46px; line-height:1; letter-spacing:-0.03em; color:rgba(255,255,255,0.7); text-align:right; text-decoration:none; opacity:0; display:block; transition:color .18s ease,letter-spacing .18s ease,transform .22s cubic-bezier(.22,1,.36,1); }
         .mob-link:hover { color:#fff; letter-spacing:-0.01em; transform:translateX(-5px); }
@@ -268,7 +263,15 @@ export default function HeroSection() {
         ref={heroRef}
         onMouseMove={handleMouseMove}
         className={`hero-card relative overflow-hidden flex flex-col ${loaded ? "loaded" : ""}`}
-        style={{ margin:"6px", borderRadius:"18px", border:"1px solid rgba(255,255,255,0.13)", minHeight:"calc(100vh - 32px)", background:"#0f1011", fontFamily:"'Plus Jakarta Sans',sans-serif" }}
+        style={{
+          // Card styling preserved, height accounts for the 6px margin on each side
+          height: "calc(100vh - 12px)",
+          margin: "6px",
+          borderRadius: "18px",
+          border: "1px solid rgba(255,255,255,0.13)",
+          background: "#0f1011",
+          fontFamily: "'Plus Jakarta Sans',sans-serif",
+        }}
       >
         <div className="orb orb-blue"/><div className="orb orb-white"/><div className="scan-line"/>
 
@@ -325,7 +328,7 @@ export default function HeroSection() {
             </a>
           </div>
 
-          {/* HAMBURGER — inside .burger-wrap which CSS hides at ≥768px */}
+          {/* HAMBURGER */}
           <div className="burger-wrap">
             <button
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -344,10 +347,8 @@ export default function HeroSection() {
           <h1 className="h-fade-2 text-white mb-5 md:mb-[18px]"
             style={{ fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:500, fontSize:"clamp(36px,6.5vw,75.84px)", lineHeight:1, letterSpacing:"-0.04em" }}>
             <span className="block">Master DeFi,</span>
-            <span className="flex flex-wrap items-center gap-x-3 gap-y-2"
-              style={{ marginTop:"clamp(6px,1vw,10px)", lineHeight:"clamp(58px,6.5vw,82px)" }}>
-              Launch your
-              <span className="future-pill">Future</span>
+            <span className="block" style={{ marginTop:"clamp(6px,1vw,10px)" }}>
+              Launch your <span className="future-pill">Future</span>
             </span>
           </h1>
           <div className="h-fade-3 mb-8">
