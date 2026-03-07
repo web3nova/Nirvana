@@ -333,7 +333,7 @@ export default function Events() {
                     style={{ borderBottom: "1px solid #EBEBEB" }}
                 >
                     <div className="flex flex-col gap-0.5">
-                        <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 14, letterSpacing: "-0.02em", color: "#000", lineHeight: "1" }}> //The color can be changed to #030303
+                        <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 14, letterSpacing: "-0.02em", color: "#000", lineHeight: "1" }}> 
                             Events
                         </span>
                         <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 15, letterSpacing: "-0.32px", color: "#030303", lineHeight: "1.3" }}>
