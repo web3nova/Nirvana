@@ -121,16 +121,16 @@ function ImageGrid({ images, desktopHeight = 300, tabletHeight = 220, mobileHeig
 }
 
 /* ─── Section block ──────────────────────────────────────────── */
-function SectionBlock({ label, items }: { label: string; items: string[] }) {
+function SectionBlock({ label, items, lineHeight= '16px', letterSpacing= '-0.32px' }: { label: string; items: string[], lineHeight?:string, letterSpacing?:string }) {
     return (
         <div>
             <p
                 style={{
                     fontFamily: JAKARTA,
                     fontWeight: 500,
-                    fontSize: 16,
-                    lineHeight: "16px",       // 100%
-                    letterSpacing: "-0.32px", // -2% of 16px
+                    fontSize: 18,
+                    lineHeight: "18px",       // 100%
+                    letterSpacing: "-0.36px", // -2% of 18px
                     color: "#030303",
                     marginBottom: 8,
                 }}
@@ -143,8 +143,10 @@ function SectionBlock({ label, items }: { label: string; items: string[] }) {
                     fontFamily: JAKARTA,
                     fontWeight: 500,
                     fontSize: 16,
-                    lineHeight: "16px",
-                    letterSpacing: "-0.32px",
+                    lineHeight,
+                    letterSpacing,
+                    // lineHeight: "16px",
+                    // letterSpacing: "-0.32px",
                     color: "#6F6F6F",
                 }}
             >
@@ -331,10 +333,10 @@ export default function Events() {
                     style={{ borderBottom: "1px solid #EBEBEB" }}
                 >
                     <div className="flex flex-col gap-0.5">
-                        <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 12, letterSpacing: "-0.02em", color: "#A0A0A0", lineHeight: "1" }}>
+                        <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 14, letterSpacing: "-0.02em", color: "#000", lineHeight: "1" }}> //The color can be changed to #030303
                             Events
                         </span>
-                        <span style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 15, letterSpacing: "-0.32px", color: "#030303", lineHeight: "1.3" }}>
+                        <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 15, letterSpacing: "-0.32px", color: "#030303", lineHeight: "1.3" }}>
                             {activeLabel}
                         </span>
                     </div>
@@ -391,8 +393,8 @@ export default function Events() {
                                     color: "#6F6F6F",
                                     width: 917,
                                     maxWidth: "100%",
-                                    height: 40,
-                                    overflow: "hidden",
+                                    // height: 40,
+                                    // overflow: "hidden",
                                 }}
                             >
                                 These were two landmark offline masterclass & community meetups hosted by Nirvana Academy in 2025. They represent the organization's shift from purely virtual education to real-world, high-energy community building.
@@ -409,9 +411,9 @@ export default function Events() {
                             {/* NVS1 */}
                             <SectionH2>NVS1 (First Edition)</SectionH2>
                             <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
-                                <SectionBlock label="What it was:" items={["Intimate offline gathering for 50 selected alumni from Nirvana cohorts", "Deep networking + DeFi masterclass", 'Focused on "real talks" and personal connections ve birthed good products in web3']} />
-                                <SectionBlock label="Key characteristics:" items={["Exclusive (50 handpicked participants)", "High-touch, intimate vibe", "Emphasis on alumni who had already proven commitment", "Blend of education + relationship building"]} />
-                                <SectionBlock label="Impact:" items={['Created "moments we\'ll never forget" (Testimonial)', "Set the standard for Nirvana's offline events", "Proved demand for in-person experiences", "A number of collaborations that have birthed good products in web3"]} />
+                                <SectionBlock lineHeight="25.6px" letterSpacing="-0.32px" label="What it was:" items={["Intimate offline gathering for 50 selected alumni from Nirvana cohorts", "Deep networking + DeFi masterclass", 'Focused on "real talks" and personal connections ve birthed good products in web3']} />
+                                <SectionBlock lineHeight="25.6px" letterSpacing="-0.32px" label="Key characteristics:" items={["Exclusive (50 handpicked participants)", "High-touch, intimate vibe", "Emphasis on alumni who had already proven commitment", "Blend of education + relationship building"]} />
+                                <SectionBlock lineHeight="25.6px" letterSpacing="-0.32px" label="Impact:" items={['Created "moments we\'ll never forget" (Testimonial)', "Set the standard for Nirvana's offline events", "Proved demand for in-person experiences", "A number of collaborations that have birthed good products in web3"]} />
                             </div>
 
                             {/* NVS1 grid */}
@@ -423,9 +425,9 @@ export default function Events() {
                             {/* NVS2 */}
                             <SectionH2>NVS2 (Second Edition)</SectionH2>
                             <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
-                                <SectionBlock label="What it was:" items={["Expanded to 60+ builders", "4+ hours of masterclass-level discussions", 'Featured chaotic Q&A and "pure energy"', "Vox pop chaos (unscripted, raw interactions)"]} />
-                                <SectionBlock label="Key characteristics:" items={["Larger scale but still intimate (60 participants)", "Extended duration (4+ hours)", "Unfiltered, high-energy format", "More interactive and spontaneous than NVS1"]} />
-                                <SectionBlock label="Impact:" items={["Demonstrated Nirvana could scale the format while maintaining quality", '"Chaos" became a signature element', "Solidified offline events as core to the brand"]} />
+                                <SectionBlock lineHeight="25.6px" letterSpacing="-0.32px" label="What it was:" items={["Expanded to 60+ builders", "4+ hours of masterclass-level discussions", 'Featured chaotic Q&A and "pure energy"', "Vox pop chaos (unscripted, raw interactions)"]} />
+                                <SectionBlock lineHeight="25.6px" letterSpacing="-0.32px" label="Key characteristics:" items={["Larger scale but still intimate (60 participants)", "Extended duration (4+ hours)", "Unfiltered, high-energy format", "More interactive and spontaneous than NVS1"]} />
+                                <SectionBlock lineHeight="25.6px" letterSpacing="-0.32px" label="Impact:" items={["Demonstrated Nirvana could scale the format while maintaining quality", '"Chaos" became a signature element', "Solidified offline events as core to the brand"]} />
                             </div>
 
                             {/* NVS2 grid */}
@@ -438,7 +440,7 @@ export default function Events() {
                             <SectionH2>What Made Them Special</SectionH2>
                             <ol
                                 className="flex flex-col gap-2 mb-8 sm:mb-12 pl-5 list-decimal"
-                                style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 16, lineHeight: "16px", letterSpacing: "-0.32px", color: "#6F6F6F" }}
+                                style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 16, lineHeight: "25.6px", letterSpacing: "-0.32px", color: "#6F6F6F" }}
                             >
                                 <li>Hybrid Energy: Masterclass education + community bonding</li>
                                 <li>Intimate Scale: Not massive conferences, but focused gatherings</li>
@@ -451,7 +453,7 @@ export default function Events() {
                             <SectionH2>Strategic Importance</SectionH2>
                             <div
                                 className="flex flex-col gap-2 sm:gap-3 mb-5 sm:mb-6"
-                                style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 16, lineHeight: "16px", letterSpacing: "-0.32px", color: "#6F6F6F" }}
+                                style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 16, lineHeight: "25.6px", letterSpacing: "-0.32px", color: "#6F6F6F" }}
                             >
                                 <p>These events were pivotal in Nirvana's evolution:</p>
                                 <p>Before NVS: Purely online academy, WhatsApp community</p>
@@ -466,9 +468,9 @@ export default function Events() {
                             </div>
                             <p
                                 className="mb-10 sm:mb-14"
-                                style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 16, lineHeight: "16px", letterSpacing: "-0.32px", color: "#6F6F6F" }}
+                                style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: 16, lineHeight: "25.6px", letterSpacing: "-0.32px", color: "#6F6F6F" }}
                             >
-                                <span style={{ fontWeight: 700, color: "#030303" }}>2026 Relevance:</span> These events directly informed the Lagos office strategy and hybrid cohort model planned for Q3 2026. NVS wasn't just events. It was Nirvana proving they could move from screens to real-world impact.
+                                <span style={{ fontWeight: 600, color: "#030303", lineHeight:"25.6px", letterSpacing:"-0.32px" }}>2026 Relevance:</span> These events directly informed the Lagos office strategy and hybrid cohort model planned for Q3 2026. NVS wasn't just events. It was Nirvana proving they could move from screens to real-world impact.
                             </p>
 
                             {/* NVS 1 & 2 combined grid */}
